@@ -70,7 +70,7 @@ export const siteConfig: SiteConfig = {
     // Ships with a silent placeholder so the toggle works with zero 404s.
     // Replace public/music/background.wav with your own track (any browser
     // audio format) and update this path. See public/music/README.md.
-    src: "/music/background.wav",
+    src: "/music/I_Love_You_3000.mp3",
     enabledByDefault: true,
     volume: 0.35,
   },
