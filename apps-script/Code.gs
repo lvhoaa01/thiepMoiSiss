@@ -109,3 +109,24 @@ function getWishes_() {
 
   return wishes.reverse().slice(0, MAX_WISHES);
 }
+
+/**
+ * Manual WRITE test.
+ * Run this straight from the Apps Script editor (Run ▸ testWrite) to append a
+ * sample RSVP row — handy because a POST can't be triggered by opening a URL in
+ * the browser. After running, check the "RSVP" tab for a new row, and see the
+ * appended JSON in View ▸ Logs.
+ */
+function testWrite() {
+  var response = doPost({
+    postData: {
+      contents: JSON.stringify({
+        action: "rsvp",
+        name: "Test Nguyễn",
+        attending: "yes",
+        message: "Chúc mừng tốt nghiệp! 🎓",
+      }),
+    },
+  });
+  Logger.log(response.getContent());
+}

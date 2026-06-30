@@ -24,7 +24,7 @@ export const siteConfig: SiteConfig = {
       "Trân trọng kính mời bạn đến tham dự lễ tốt nghiệp của Nguyễn Phương Anh.",
     locale: "vi_VN",
     // Set to your real deployed origin (used for OpenGraph / metadataBase).
-    siteUrl: "https://graduation-invitation.vercel.app",
+    siteUrl: "https://thiep-moi-siss.vercel.app/",
   },
 
   /* ───────────────────────────── Identity ────────────────────────────── */
@@ -62,7 +62,7 @@ export const siteConfig: SiteConfig = {
     // Prefer the env override (see .env.example); otherwise paste your URL here.
     appsScriptUrl:
       process.env.NEXT_PUBLIC_APPS_SCRIPT_URL ??
-      "https://script.google.com/macros/s/REPLACE_WITH_YOUR_DEPLOYMENT_ID/exec",
+      "https://script.google.com/macros/s/AKfycbwJwi2q9XHGpVtQ1Xq3Hjz0yhx5_9_ZgD4QcSbI0UOSxW1THsTaN7KkXGLfWy55aFCF/exec",
   },
 
   /* ────────────────────────────── Music ──────────────────────────────── */

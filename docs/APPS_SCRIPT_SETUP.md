@@ -52,10 +52,55 @@ NEXT_PUBLIC_APPS_SCRIPT_URL=https://script.google.com/macros/s/AKfy…/exec
 
 ## 5. Test it
 
-- **Read (GET):** open `https://…/exec?action=wishes` in your browser → you
-  should see `{"ok":true,"data":[]}`.
-- **Write (POST):** submit the RSVP form on the site, then check the `RSVP`
-  tab — a new row should appear. Leave a message and it shows in the guestbook.
+### Read (GET)
+
+Open `https://…/exec?action=wishes` in your browser → you should see
+`{"ok":true,"data":[]}` (empty until there are wishes).
+
+### Write (POST)
+
+> ⚠️ You **cannot** test a write by opening a URL in the browser — that's a GET
+> (`doGet`). A write is a POST (`doPost`). Use one of these:
+
+**Option A — run `testWrite` in the editor (easiest, no website/CORS needed):**
+
+1. In the Apps Script editor, pick **`testWrite`** in the function dropdown
+   (top toolbar) and click **Run**.
+2. Open the **`RSVP`** tab in your sheet — a new row should appear.
+3. (Optional) **View ▸ Logs** shows the response: `{"ok":true}`.
+
+**Option B — PowerShell (simulates the real request):**
+
+```powershell
+Invoke-RestMethod -Uri "https://…/exec" -Method Post `
+  -ContentType "text/plain" `
+  -Body '{"action":"rsvp","name":"Test","attending":"yes","message":"Xin chào"}'
+```
+
+**Option C — submit the RSVP form on the running site** (`npm run dev` with
+`appsScriptUrl` configured).
+
+### What a successful write looks like
+
+A new row is appended to the **`RSVP`** tab with four columns:
+
+| Timestamp           | Name | Attending | Message              |
+| ------------------- | ---- | --------- | -------------------- |
+| _(submit time)_     | Test | yes       | Xin chào             |
+
+Rows that include a **Message** then show up in the guestbook
+(`?action=wishes`).
+
+### If nothing appears in the sheet
+
+- You **edited `Code.gs` after deploying** → re-deploy a new version
+  (see "Updating the script later" below). The pasted code must be saved **and**
+  deployed.
+- The tab isn't named **`RSVP`** (case-sensitive). The script auto-creates it on
+  first write, so a fresh `RSVP` tab appearing is normal.
+- You ran `testWrite` but looked at the wrong spreadsheet — the script is bound
+  to the sheet you opened it from (Extensions ▸ Apps Script).
+- Permission prompt wasn't completed (re-run and approve).
 
 ## How the request works (CORS)
 
