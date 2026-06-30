@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Fallback theme tokens. The real values are written onto <body> from
+ * config/site.config.ts (see app/layout.tsx); these defaults simply prevent
+ * any flash before hydration. Values are "R G B" triples for rgb()/alpha.
+ */
+:root {
+  --color-primary: 37 99 235;
+  --color-primary-foreground: 255 255 255;
+  --color-navy: 12 27 56;
+  --color-sky: 56 189 248;
+  --color-ink: 15 23 42;
+  --color-subtle: 100 116 139;
+  --color-surface: 248 251 255;
+  --color-surface-2: 234 243 255;
+}
+
+@layer base {
+  * {
+    @apply border-white/40;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Prevent any horizontal scrolling at every breakpoint. */
+    overflow-x: clip;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-surface text-ink font-sans antialiased;
+    overflow-x: clip;
+    min-height: 100dvh;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: rgb(var(--color-primary) / 0.18);
+    color: rgb(var(--color-navy));
+  }
+
+  /* Consistent, on-brand focus ring for keyboard users. */
+  :focus-visible {
+    outline: 2px solid rgb(var(--color-primary) / 0.6);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Respect reduced-motion globally as a safety net. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Soft glassmorphism surface used by cards across the site. */
+  .glass {
+    background-color: rgb(255 255 255 / 0.6);
+    backdrop-filter: blur(16px) saturate(135%);
+    -webkit-backdrop-filter: blur(16px) saturate(135%);
+    border: 1px solid rgb(255 255 255 / 0.6);
+    box-shadow:
+      0 1px 1px rgb(255 255 255 / 0.5) inset,
+      0 18px 50px -22px rgb(12 27 56 / 0.35);
+  }
+
+  .glass-strong {
+    background-color: rgb(255 255 255 / 0.78);
+    backdrop-filter: blur(22px) saturate(140%);
+    -webkit-backdrop-filter: blur(22px) saturate(140%);
+    border: 1px solid rgb(255 255 255 / 0.7);
+    box-shadow:
+      0 1px 1px rgb(255 255 255 / 0.6) inset,
+      0 24px 60px -24px rgb(12 27 56 / 0.4);
+  }
+}
+
+@layer utilities {
+  /* Gradient text used for headings / numerals. */
+  .text-gradient {
+    background-image: linear-gradient(
+      120deg,
+      rgb(var(--color-navy)),
+      rgb(var(--color-primary)),
+      rgb(var(--color-sky))
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Vertical fade mask for the movie-credits guestbook. */
+  .mask-fade-y {
+    -webkit-mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 12%,
+      black 88%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to bottom,
+      transparent 0%,
+      black 12%,
+      black 88%,
+      transparent 100%
+    );
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tap-transparent {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
