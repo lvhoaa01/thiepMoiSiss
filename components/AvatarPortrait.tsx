@@ -14,15 +14,17 @@ interface AvatarPortraitProps {
 
 // Star sparkles around the medallion (deterministic → SSR-safe).
 const SPARKLES = [
-  { top: "-4%", left: "18%", size: 16, delay: 0, duration: 2.4 },
-  { top: "5%", left: "86%", size: 13, delay: 0.6, duration: 2.6 },
-  { top: "-2%", left: "54%", size: 11, delay: 1.2, duration: 2.2 },
-  { top: "30%", left: "98%", size: 14, delay: 0.9, duration: 2.8 },
-  { top: "72%", left: "-6%", size: 12, delay: 1.5, duration: 2.5 },
-  { top: "92%", left: "70%", size: 15, delay: 2, duration: 2.6 },
-  { top: "50%", left: "-4%", size: 10, delay: 0.3, duration: 2.3 },
-  { top: "88%", left: "26%", size: 11, delay: 1.8, duration: 2.7 },
-  { top: "14%", left: "3%", size: 12, delay: 1.1, duration: 2.4 },
+  { top: "-5%", left: "18%", size: 22, delay: 0, duration: 1.8 },
+  { top: "4%", left: "86%", size: 18, delay: 0.4, duration: 2 },
+  { top: "-3%", left: "52%", size: 15, delay: 0.8, duration: 1.7 },
+  { top: "28%", left: "99%", size: 20, delay: 0.6, duration: 2.1 },
+  { top: "70%", left: "-8%", size: 17, delay: 1, duration: 1.9 },
+  { top: "93%", left: "68%", size: 21, delay: 1.3, duration: 2 },
+  { top: "48%", left: "-6%", size: 14, delay: 0.2, duration: 1.8 },
+  { top: "90%", left: "24%", size: 16, delay: 1.1, duration: 2.2 },
+  { top: "12%", left: "1%", size: 17, delay: 0.7, duration: 1.9 },
+  { top: "60%", left: "97%", size: 15, delay: 1.5, duration: 2 },
+  { top: "-6%", left: "72%", size: 18, delay: 0.5, duration: 1.7 },
 ];
 
 const STAR_PATH =
@@ -46,8 +48,13 @@ export function AvatarPortrait({ src, alt, className }: AvatarPortraitProps) {
       animate={prefersReduced ? undefined : { y: [0, -8, 0] }}
       transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
     >
-      {/* soft radial light behind */}
-      <div aria-hidden className="absolute -inset-7 rounded-full bg-accent/30 blur-2xl" />
+      {/* large soft radial halo that slowly pulses */}
+      <motion.div
+        aria-hidden
+        className="absolute -inset-12 rounded-full bg-accent/25 blur-[64px]"
+        animate={prefersReduced ? undefined : { scale: [1, 1.03, 1], opacity: [0.85, 1, 0.85] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      />
 
       {/* rotating shimmer sweep */}
       {!prefersReduced ? (
@@ -90,7 +97,7 @@ export function AvatarPortrait({ src, alt, className }: AvatarPortraitProps) {
               }}
               initial={{ x: "-130%" }}
               animate={{ x: "160%" }}
-              transition={{ duration: 1.5, repeat: Infinity, repeatDelay: 2.8, ease: "easeInOut" }}
+              transition={{ duration: 1.3, repeat: Infinity, repeatDelay: 1.6, ease: "easeInOut" }}
             />
           ) : null}
         </div>

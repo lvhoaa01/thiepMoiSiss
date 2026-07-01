@@ -63,7 +63,7 @@ export function CountdownSection() {
         />
 
         <Reveal className="mt-10">
-          <GlassCard strong className="overflow-hidden p-5 sm:p-9">
+          <GlassCard strong shine shineDelay={2} className="overflow-hidden p-5 sm:p-9">
             {/* Big date */}
             <div className="text-center">
               <p className="font-body text-sm text-subtle">

@@ -22,6 +22,10 @@ import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
 import type { GalleryImage, PlanEntry } from "@/types";
 
 // Heavy, purely-decorative effects — client-only to trim the initial bundle.
+const AmbientEffects = dynamic(
+  () => import("@/components/effects/AmbientEffects").then((mod) => mod.AmbientEffects),
+  { ssr: false },
+);
 const Particles = dynamic(
   () => import("@/components/effects/Particles").then((mod) => mod.Particles),
   { ssr: false },
@@ -62,6 +66,7 @@ export function InvitationApp({ plan, galleryImages }: InvitationAppProps) {
   return (
     <>
       <AnimatedBackground />
+      <AmbientEffects />
       <Particles />
       <MouseGlow />
 

@@ -78,7 +78,7 @@ export function RsvpSection({ onSubmitted }: RsvpSectionProps) {
         />
 
         <Reveal className="mt-10">
-          <GlassCard strong className="relative overflow-hidden p-6 sm:p-9">
+          <GlassCard strong shine shineDelay={3} className="relative overflow-hidden p-6 sm:p-9">
             {status === "success" ? (
               <Confetti variant="burst" count={motionCfg.confettiCount} />
             ) : null}

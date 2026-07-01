@@ -42,7 +42,7 @@ export function ParkingSection() {
         />
 
         <Reveal className="mt-10">
-          <GlassCard strong className="overflow-hidden p-4 sm:p-5">
+          <GlassCard strong shine shineDelay={1} className="overflow-hidden p-4 sm:p-5">
             <div className="overflow-hidden rounded-media bg-background/60">
               <div className="relative aspect-[4/3] w-full">
                 <Image
@@ -60,7 +60,7 @@ export function ParkingSection() {
         <div className="mt-6 grid gap-6">
           {/* Car */}
           <Reveal>
-            <GlassCard strong className="p-6 sm:p-8">
+            <GlassCard strong shine shineDelay={3} className="p-6 sm:p-8">
               <div className="flex items-center gap-3">
                 <span className="grid h-11 w-11 place-items-center rounded-full bg-accent/12 text-accent">
                   <Car className="h-5 w-5" aria-hidden />
@@ -88,7 +88,7 @@ export function ParkingSection() {
 
           {/* Motorbike */}
           <Reveal delay={0.05}>
-            <GlassCard strong className="p-6 sm:p-8">
+            <GlassCard strong shine shineDelay={5} className="p-6 sm:p-8">
               <div className="flex items-center gap-3">
                 <span className="grid h-11 w-11 place-items-center rounded-full bg-accent/12 text-accent">
                   <Bike className="h-5 w-5" aria-hidden />

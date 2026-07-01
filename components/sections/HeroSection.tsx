@@ -48,6 +48,8 @@ export function HeroSection({ revealed, plan }: HeroSectionProps) {
     >
       <GlassCard
         strong
+        shine
+        shineDelay={0}
         className="relative w-full max-w-lg overflow-hidden px-7 py-14 text-center sm:px-12"
       >
         {/* inset gold frame */}

@@ -21,7 +21,7 @@ export function LocationSection() {
         />
 
         <Reveal className="mt-10">
-          <GlassCard strong className="overflow-hidden p-4 sm:p-5">
+          <GlassCard strong shine shineDelay={4} className="overflow-hidden p-4 sm:p-5">
             <div className="px-2 pb-5 pt-3 text-center">
               <p className="font-heading text-2xl font-semibold text-primary sm:text-3xl">
                 {event.venueName}

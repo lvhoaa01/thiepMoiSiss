@@ -57,7 +57,7 @@ export function TimelineSection() {
                       <Icon className="h-5 w-5" aria-hidden />
                     </span>
 
-                    <GlassCard hover className="p-5 sm:p-6">
+                    <GlassCard hover shine shineDelay={1 + index * 2} className="p-5 sm:p-6">
                       <time className="text-gradient font-heading text-lg font-bold sm:text-xl">
                         {item.time}
                       </time>
