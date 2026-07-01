@@ -225,7 +225,7 @@ export const siteConfig: SiteConfig = {
     rsvp: {
       scriptLabel: "R.S.V.P",
       title: "Xác nhận tham dự",
-      subtitle: "Sự hiện diện của bạn là niềm vinh hạnh của gia đình",
+      subtitle: "Sự có mặt của bạn là món quà tốt nghiệp tuyệt vời nhất!",
       nameLabel: "Họ và tên",
       namePlaceholder: "Nhập tên của bạn",
       attendanceLabel: "Bạn sẽ tham dự chứ?",
@@ -258,7 +258,7 @@ export const siteConfig: SiteConfig = {
       scriptLabel: "Thank You",
       thankYou: "Trân trọng cảm ơn",
       quote:
-        "Những cố gắng của con hôm nay cũng là nhờ sự đồng hành của mọi người. Mong được gặp thầy cô, bạn bè và gia đình trong ngày trọng đại này.",
+        "Trước hết, con muốn gửi lời cảm ơn và biết ơn sâu sắc đặc biệt đến người mẹ kính yêu của con và người chị yếu dấu của em - nguồn động lực to lớn nhất để con luôn mạnh mẽ cố gắng, phấn đấu từng ngày. Không kém phần quan trọng chính, sự có mặt của đại gia đình làm hậu thuẫn phía sau con là ông bà nội cùng các bác, bá, cô, chú, thím, anh, chị, em. Cuối cùng, bản thân Phanh luôn cảm thấy may mắn vì trên hành trình Phanh trưởng thành, Phanh đã gặp được những người thầy, người anh, người chị và người bạn hết sức đáng quý. Phanh muốn gửi lời cảm ơn sâu sắc đến tất cả mọi người đã luôn yêu thương, bên cạnh và giúp đỡ Phanh rất nhiều trong học tập cũng như công việc. Phanh xin lưu giữ và ghi nhớ tất cả mọi người trong tim.",
       contactLabel: "Liên hệ trực tiếp",
     },
     music: { play: "Bật nhạc nền", pause: "Tắt nhạc nền" },
