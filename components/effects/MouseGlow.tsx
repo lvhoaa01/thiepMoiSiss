@@ -20,7 +20,7 @@ export function MouseGlow() {
   const smoothY = useSpring(y, { stiffness: 120, damping: 25, mass: 0.4 });
 
   useEffect(() => {
-    if (!siteConfig.animation.mouseGlow) return;
+    if (!siteConfig.motion.mouseGlow) return;
     if (!window.matchMedia("(pointer: fine)").matches) return;
 
     setEnabled(true);
@@ -38,7 +38,7 @@ export function MouseGlow() {
     <motion.div
       aria-hidden
       style={{ x: smoothX, y: smoothY }}
-      className="pointer-events-none fixed left-0 top-0 -z-10 -ml-[240px] -mt-[240px] h-[480px] w-[480px] rounded-full bg-sky/15 blur-[120px]"
+      className="pointer-events-none fixed left-0 top-0 -z-10 -ml-[240px] -mt-[240px] h-[480px] w-[480px] rounded-full bg-accent/12 blur-[120px]"
     />
   );
 }

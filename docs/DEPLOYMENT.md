@@ -44,6 +44,18 @@ vercel env add NEXT_PUBLIC_APPS_SCRIPT_URL
 npm run build && npm run start   # serves the prod build on :3000
 ```
 
+## Build inputs (must be committed)
+
+These are read at **build time**, so they must be in the repo:
+
+- `graPlan.csv` (project root) — the guest plan.
+- `public/gallery/*` — gallery photos (auto-loaded).
+- `public/mapXe.jpg` — parking map.
+
+The provided source folders `imgGal/` and `imgForm/` at the root are **not**
+used by the app (gallery is served from `public/gallery`); you may delete them to
+shrink the repo.
+
 ## Notes
 
 - No server, secrets, or database to provision — Google Sheets + Apps Script is

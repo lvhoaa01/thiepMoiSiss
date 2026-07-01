@@ -4,17 +4,18 @@ import { motion, type Variants } from "framer-motion";
 import { Calendar, ChevronDown, Clock, MapPin, Phone } from "lucide-react";
 import { Suspense } from "react";
 
-import { GuestName } from "@/components/GuestName";
-import { Bunting } from "@/components/illustrations/Bunting";
-import { FloralCluster } from "@/components/illustrations/Florals";
+import { GuestDetails } from "@/components/GuestDetails";
+import { Flourish } from "@/components/illustrations/Flourish";
 import { GraduateIllustration } from "@/components/illustrations/GraduateIllustration";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { siteConfig } from "@/config/site.config";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
+import type { PlanEntry } from "@/types";
 
 interface HeroSectionProps {
   /** Starts the staggered entrance once the intro has finished. */
   revealed: boolean;
+  plan: PlanEntry[];
 }
 
 const containerVariants: Variants = {
@@ -27,16 +28,15 @@ const itemVariants: Variants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
 };
 
-export function HeroSection({ revealed }: HeroSectionProps) {
+export function HeroSection({ revealed, plan }: HeroSectionProps) {
   const prefersReduced = usePrefersReducedMotion();
   const { identity, event, text } = siteConfig;
-
   const animateState = prefersReduced || revealed ? "show" : "hide";
 
-  const infoRows = [
-    { icon: Calendar, value: event.dateLabel },
+  const facts = [
+    { icon: Calendar, value: `${event.weekdayLabel} · ${event.dateLabel}` },
     { icon: Clock, value: event.timeLabel },
-    { icon: MapPin, value: event.address.join(", ") },
+    { icon: MapPin, value: event.venueName },
   ];
 
   return (
@@ -47,11 +47,13 @@ export function HeroSection({ revealed }: HeroSectionProps) {
     >
       <GlassCard
         strong
-        className="relative w-full max-w-md overflow-hidden px-6 pb-12 pt-16 text-center sm:px-10"
+        className="relative w-full max-w-lg overflow-hidden px-7 py-14 text-center sm:px-12"
       >
-        <Bunting className="pointer-events-none absolute inset-x-0 top-2 w-full" />
-        <FloralCluster className="pointer-events-none absolute -bottom-2 left-0 w-24 opacity-90" />
-        <FloralCluster flip className="pointer-events-none absolute -bottom-2 right-0 w-24 opacity-90" />
+        {/* inset gold frame */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-3 rounded-[1.45rem] border border-accent/25"
+        />
 
         <motion.div
           className="relative z-10 flex flex-col items-center"
@@ -61,61 +63,76 @@ export function HeroSection({ revealed }: HeroSectionProps) {
         >
           <motion.p
             variants={itemVariants}
-            className="text-xs font-semibold uppercase tracking-[0.3em] text-primary/80"
+            className="font-button text-[0.7rem] font-medium text-subtle overline"
           >
             {identity.invitationTitle}
           </motion.p>
 
-          <motion.p variants={itemVariants} className="mt-6 text-sm text-subtle">
+          <motion.p variants={itemVariants} className="mt-7 font-body text-sm text-subtle">
             {identity.ceremonyLabel}
           </motion.p>
 
           <motion.h1
             variants={itemVariants}
-            className="text-gradient mt-2 font-display text-3xl font-bold leading-tight sm:text-4xl"
+            className="mt-2 font-heading text-4xl font-bold leading-tight text-primary sm:text-5xl"
           >
             {identity.graduateName}
           </motion.h1>
 
-          <motion.div variants={itemVariants} className="my-6 h-px w-16 bg-primary/30" />
-
-          <motion.p variants={itemVariants} className="text-sm text-subtle">
-            {identity.guestPrefix}
+          <motion.p variants={itemVariants} className="mt-3 font-script text-3xl text-accent">
+            {identity.degreeLabel}
           </motion.p>
+
           <motion.p
             variants={itemVariants}
-            className="mt-1 inline-block border-b border-dashed border-primary/40 pb-1 font-display text-2xl font-semibold text-navy"
+            className="mt-2 font-button text-[0.7rem] font-medium text-subtle overline"
           >
-            <Suspense fallback={identity.defaultGuestName}>
-              <GuestName />
-            </Suspense>
+            {identity.schoolLabel}
           </motion.p>
 
-          <motion.div variants={itemVariants} className="mt-8">
-            <GraduateIllustration className="mx-auto h-44 w-auto" />
+          <motion.div variants={itemVariants}>
+            <Flourish className="mx-auto my-7 h-5 w-40 text-accent/70" />
           </motion.div>
 
-          <motion.ul variants={itemVariants} className="mt-8 w-full space-y-3 text-left">
-            {infoRows.map((row, index) => (
-              <li key={index} className="flex items-start gap-3">
-                <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">
-                  <row.icon className="h-4 w-4" aria-hidden />
-                </span>
-                <span className="text-sm leading-relaxed text-ink/90">{row.value}</span>
+          <motion.div variants={itemVariants}>
+            <GraduateIllustration className="mx-auto h-40 w-auto" />
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="mt-9">
+            <p className="font-body text-sm text-subtle">{identity.guestPrefix}</p>
+            <div className="mt-2">
+              <Suspense
+                fallback={
+                  <p className="font-heading text-[1.7rem] font-semibold text-primary sm:text-4xl">
+                    {identity.defaultGuestName}
+                  </p>
+                }
+              >
+                <GuestDetails plan={plan} />
+              </Suspense>
+            </div>
+          </motion.div>
+
+          <motion.ul variants={itemVariants} className="mt-9 space-y-2.5">
+            {facts.map((fact, index) => (
+              <li
+                key={index}
+                className="flex items-center justify-center gap-2.5 font-body text-sm text-ink/90"
+              >
+                <fact.icon className="h-4 w-4 shrink-0 text-accent" aria-hidden />
+                {fact.value}
               </li>
             ))}
-            <li className="flex items-start gap-3">
-              <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary/10 text-primary">
-                <Phone className="h-4 w-4" aria-hidden />
-              </span>
-              <a
-                href={`tel:${event.phone}`}
-                className="text-sm font-medium text-primary underline-offset-4 hover:underline"
-              >
-                {event.phone}
-              </a>
-            </li>
           </motion.ul>
+
+          <motion.a
+            variants={itemVariants}
+            href={`tel:${event.phone}`}
+            className="mt-6 inline-flex items-center gap-2 font-button text-sm font-medium text-accent underline-offset-4 hover:underline"
+          >
+            <Phone className="h-4 w-4" aria-hidden />
+            {event.phone}
+          </motion.a>
         </motion.div>
       </GlassCard>
 
@@ -125,7 +142,7 @@ export function HeroSection({ revealed }: HeroSectionProps) {
         animate={{ opacity: animateState === "show" ? 1 : 0 }}
         transition={{ delay: 1, duration: 0.6 }}
       >
-        <span className="text-xs uppercase tracking-[0.2em]">{text.hero.scrollHint}</span>
+        <span className="font-button text-[0.7rem] overline">{text.hero.scrollHint}</span>
         <motion.span
           animate={prefersReduced ? undefined : { y: [0, 6, 0] }}
           transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}

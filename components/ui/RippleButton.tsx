@@ -5,13 +5,12 @@ import { useCallback, useState, type PointerEvent, type ReactNode } from "react"
 
 import { cn } from "@/utils/cn";
 
-type Variant = "primary" | "outline" | "ghost";
+type Variant = "primary" | "accent" | "outline";
 
 interface RippleButtonProps {
   children: ReactNode;
   className?: string;
   variant?: Variant;
-  /** Button mode. */
   type?: "button" | "submit";
   onClick?: () => void;
   disabled?: boolean;
@@ -28,14 +27,14 @@ interface Ripple {
 }
 
 const VARIANT_CLASS: Record<Variant, string> = {
-  primary: "bg-primary text-primary-foreground shadow-lift hover:shadow-glow",
-  outline: "bg-white/70 text-navy border border-primary/25 hover:border-primary/45",
-  ghost: "bg-transparent text-navy hover:bg-primary/5",
+  primary: "bg-primary text-on-dark shadow-card hover:shadow-lift",
+  accent: "bg-accent text-on-dark shadow-card hover:shadow-lift",
+  outline: "bg-transparent text-primary border border-primary/25 hover:border-accent/60",
 };
 
 /**
- * A tactile button with a material-style ripple, hover lift and press feedback.
- * Renders as <a target="_blank"> when `href` is set, otherwise as <button>.
+ * Premium button with a soft ripple, hover lift and press feedback.
+ * Renders as <a target="_blank"> when `href` is set, otherwise <button>.
  */
 export function RippleButton({
   children,
@@ -68,7 +67,7 @@ export function RippleButton({
   }, []);
 
   const baseClass = cn(
-    "relative inline-flex select-none items-center justify-center overflow-hidden rounded-full px-7 py-3.5 text-sm font-semibold tracking-wide transition-shadow duration-300 tap-transparent disabled:pointer-events-none disabled:opacity-60",
+    "relative inline-flex select-none items-center justify-center gap-2 overflow-hidden rounded-full px-8 py-3.5 font-button text-sm font-semibold tracking-wide transition-shadow duration-300 tap-transparent disabled:pointer-events-none disabled:opacity-60",
     VARIANT_CLASS[variant],
     className,
   );
@@ -83,7 +82,7 @@ export function RippleButton({
           <motion.span
             key={ripple.id}
             aria-hidden
-            className="pointer-events-none absolute rounded-full bg-white/40"
+            className="pointer-events-none absolute rounded-full bg-white/30"
             style={{ left: ripple.x, top: ripple.y, width: ripple.size, height: ripple.size }}
             initial={{ scale: 0, opacity: 0.5 }}
             animate={{ scale: 2.4, opacity: 0 }}

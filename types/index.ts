@@ -1,26 +1,24 @@
 /**
  * Shared type definitions.
  *
- * Two groups live here:
  *   1. Data-model types exchanged with the Google Apps Script backend.
- *   2. The `SiteConfig` shape that `config/site.config.ts` must satisfy.
+ *   2. The invitation-plan (CSV) domain types.
+ *   3. The `SiteConfig` shape that `config/site.config.ts` must satisfy.
  *
- * Keeping the config *shape* here lets `config/site.config.ts` stay focused on
- * values only — the one file an editor needs to touch to re-skin the site.
+ * Fonts are configured separately in `config/fonts.ts` (next/font requires
+ * static imports); everything else visual lives in `site.config.ts`.
  */
 
 /* ───────────────────────────── Data model ───────────────────────────── */
 
 export type Attendance = "yes" | "no";
 
-/** Payload sent to the backend when a guest submits the RSVP form. */
 export interface RsvpInput {
   name: string;
   attending: Attendance;
   message: string;
 }
 
-/** A single guestbook entry returned by the backend. */
 export interface Wish {
   name: string;
   message: string;
@@ -28,27 +26,50 @@ export interface Wish {
   timestamp: string;
 }
 
-/** Discriminated union for every backend response. */
 export type ApiResponse<T> =
   | { ok: true; data: T }
   | { ok: false; error: string };
 
-/** Result of the client-side RSVP submission flow. */
 export type RsvpResult =
   | { status: "success" }
   | { status: "error"; message: string };
 
-/** Lifecycle of an async data fetch (used by the guestbook). */
 export type FetchStatus = "idle" | "loading" | "success" | "error";
 
-/** Remaining time, already split into units. */
 export interface TimeLeft {
   days: number;
   hours: number;
   minutes: number;
   seconds: number;
-  /** True once the target moment has passed. */
   isComplete: boolean;
+}
+
+/* ─────────────────────── Invitation plan (CSV) ──────────────────────── */
+
+export type InvitationType = "offline" | "online";
+
+/** One parsed row from `graPlan.csv`. */
+export interface PlanEntry {
+  name: string;
+  type: InvitationType;
+  /** Session/arrival time (offline only); `null` when unspecified. */
+  time: string | null;
+}
+
+/** The invitation resolved for the current `?guest=` visitor. */
+export interface ResolvedGuest {
+  displayName: string;
+  type: InvitationType | null;
+  time: string | null;
+  /** True when the guest was found in the plan. */
+  matched: boolean;
+}
+
+/** A gallery image with intrinsic dimensions (read at build time). */
+export interface GalleryImage {
+  src: string;
+  width: number;
+  height: number;
 }
 
 /* ──────────────────────────── Config shape ──────────────────────────── */
@@ -56,9 +77,7 @@ export interface TimeLeft {
 export interface SeoConfig {
   title: string;
   description: string;
-  /** OpenGraph locale, e.g. "vi_VN". */
   locale: string;
-  /** Absolute origin of the deployed site, used for metadataBase / OG. */
   siteUrl: string;
 }
 
@@ -66,87 +85,101 @@ export interface IdentityConfig {
   invitationTitle: string;
   ceremonyLabel: string;
   graduateName: string;
+  degreeLabel: string;
+  schoolLabel: string;
   guestPrefix: string;
-  /** Shown when the URL has no `?guest=` parameter. */
   defaultGuestName: string;
+  /** Optional full-bleed hero background image (path under /public). */
+  heroImage?: string;
 }
 
 export interface CalendarConfig {
   year: number;
-  /** 1-indexed month (1 = January, 7 = July). */
+  /** 1-indexed month. */
   month: number;
-  /** Day-of-month to highlight as the event day. */
   highlightDay: number;
 }
 
 export interface EventConfig {
   dateLabel: string;
   timeLabel: string;
-  /** Address rendered line-by-line. */
+  weekdayLabel: string;
   address: string[];
+  venueName: string;
   phone: string;
-  /** ISO 8601 with timezone — drives the live countdown. */
   countdownTargetISO: string;
   calendar: CalendarConfig;
 }
 
 export interface MapsConfig {
-  /** `src` for the embedded <iframe>. */
+  /** Search query used to build both URLs. */
+  query: string;
+  /** Embed zoom level (higher = closer). */
+  zoom: number;
   embedUrl: string;
-  /** External link opened by the "Open Google Maps" button. */
   externalUrl: string;
 }
 
 export interface ApiConfig {
-  /** Deployed Google Apps Script Web App URL (…/exec). */
   appsScriptUrl: string;
 }
 
 export interface MusicConfig {
-  /** Path under /public, e.g. "/music/background.mp3". */
   src: string;
   enabledByDefault: boolean;
-  /** 0–1. */
   volume: number;
 }
 
-/**
- * Palette. Each value is a space-separated RGB triple (e.g. "37 99 235")
- * so Tailwind's `rgb(var(--x) / <alpha-value>)` can apply opacity.
- */
+/** Palette. Each value is a space-separated RGB triple, e.g. "43 39 34". */
 export interface ThemeColors {
   primary: string;
-  primaryForeground: string;
-  navy: string;
-  sky: string;
+  secondary: string;
+  accent: string;
+  accentSoft: string;
+  background: string;
+  surface: string;
   ink: string;
   subtle: string;
-  surface: string;
-  surface2: string;
+  border: string;
+  onDark: string;
+}
+
+export interface ThemeRadius {
+  card: string;
+  media: string;
+  control: string;
+}
+
+export interface ThemeShadow {
+  soft: string;
+  card: string;
+  lift: string;
 }
 
 export interface ThemeConfig {
   colors: ThemeColors;
+  /** CSS gradient used for accent/gradient text. */
+  gradient: string;
+  radius: ThemeRadius;
+  shadow: ThemeShadow;
 }
 
-export interface AnimationConfig {
-  /** Master switch for all non-essential motion. */
+export interface MotionConfig {
   enabled: boolean;
   introEnabled: boolean;
   introDurationMs: number;
+  /** Global speed multiplier (1 = as authored, >1 = faster). */
+  speed: number;
+  /** Base durations in seconds. */
+  durations: { fast: number; base: number; slow: number };
+  /** Stagger delay between items, seconds. */
+  delayStep: number;
   confettiCount: number;
-  flowerCount: number;
   particleCount: number;
-  /** Desktop-only pointer glow. */
   mouseGlow: boolean;
 }
 
-export type SocialIcon =
-  | "facebook"
-  | "instagram"
-  | "mail"
-  | "phone"
-  | "link";
+export type SocialIcon = "facebook" | "instagram" | "mail" | "phone" | "link";
 
 export interface SocialLink {
   label: string;
@@ -154,12 +187,45 @@ export interface SocialLink {
   icon: SocialIcon;
 }
 
+export interface GalleryConfig {
+  scriptLabel: string;
+  title: string;
+  subtitle: string;
+}
+
+export interface ParkingRoute {
+  label: string;
+  steps: string[];
+}
+
+export interface ParkingConfig {
+  scriptLabel: string;
+  title: string;
+  subtitle: string;
+  mapImage: string;
+  noteLabel: string;
+  car: {
+    title: string;
+    notes: string[];
+    routeIn: ParkingRoute;
+    routeOut: ParkingRoute;
+  };
+  motorbike: {
+    title: string;
+    locations: string[];
+  };
+}
+
 export interface TextConfig {
   hero: {
     openEnvelope: string;
     scrollHint: string;
+    attendOffline: string;
+    attendOnline: string;
+    timeLabel: string;
   };
   countdown: {
+    scriptLabel: string;
     title: string;
     subtitle: string;
     days: string;
@@ -167,17 +233,18 @@ export interface TextConfig {
     minutes: string;
     seconds: string;
     finished: string;
-    /** Monday-first weekday headers, length 7. */
     weekdays: string[];
     monthLabelPrefix: string;
   };
   location: {
+    scriptLabel: string;
     title: string;
     subtitle: string;
     openMaps: string;
     hint: string;
   };
   rsvp: {
+    scriptLabel: string;
     title: string;
     subtitle: string;
     nameLabel: string;
@@ -194,12 +261,10 @@ export interface TextConfig {
     successBody: string;
     sendAnother: string;
     errorGeneric: string;
-    validation: {
-      nameRequired: string;
-      attendanceRequired: string;
-    };
+    validation: { nameRequired: string; attendanceRequired: string };
   };
   guestbook: {
+    scriptLabel: string;
     title: string;
     subtitle: string;
     empty: string;
@@ -208,14 +273,12 @@ export interface TextConfig {
     retry: string;
   };
   closing: {
+    scriptLabel: string;
     thankYou: string;
     quote: string;
     contactLabel: string;
   };
-  music: {
-    play: string;
-    pause: string;
-  };
+  music: { play: string; pause: string };
   backToTop: string;
 }
 
@@ -227,7 +290,9 @@ export interface SiteConfig {
   api: ApiConfig;
   music: MusicConfig;
   theme: ThemeConfig;
-  animation: AnimationConfig;
+  motion: MotionConfig;
+  gallery: GalleryConfig;
+  parking: ParkingConfig;
   text: TextConfig;
   socials: SocialLink[];
 }

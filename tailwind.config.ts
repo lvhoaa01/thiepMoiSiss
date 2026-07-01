@@ -1,12 +1,9 @@
 import type { Config } from "tailwindcss";
 
 /**
- * Tailwind theme.
- *
- * Colors intentionally reference CSS custom properties so the entire palette
- * can be driven from `config/site.config.ts` (see `app/layout.tsx`, where the
- * variables are written onto <body>). Changing the theme color in the config
- * file re-themes the whole site — no Tailwind edits required.
+ * Tailwind theme. Colors, radius, shadows and fonts all reference CSS
+ * variables written from `config/site.config.ts` + `config/fonts.ts` (see
+ * `app/layout.tsx`). Editing the config re-themes the whole site.
  */
 const config: Config = {
   content: [
@@ -18,28 +15,37 @@ const config: Config = {
     extend: {
       colors: {
         primary: "rgb(var(--color-primary) / <alpha-value>)",
-        "primary-foreground": "rgb(var(--color-primary-foreground) / <alpha-value>)",
-        navy: "rgb(var(--color-navy) / <alpha-value>)",
-        sky: "rgb(var(--color-sky) / <alpha-value>)",
+        secondary: "rgb(var(--color-secondary) / <alpha-value>)",
+        accent: "rgb(var(--color-accent) / <alpha-value>)",
+        "accent-soft": "rgb(var(--color-accent-soft) / <alpha-value>)",
+        background: "rgb(var(--color-background) / <alpha-value>)",
+        surface: "rgb(var(--color-surface) / <alpha-value>)",
         ink: "rgb(var(--color-ink) / <alpha-value>)",
         subtle: "rgb(var(--color-subtle) / <alpha-value>)",
-        surface: "rgb(var(--color-surface) / <alpha-value>)",
-        "surface-2": "rgb(var(--color-surface-2) / <alpha-value>)",
+        hairline: "rgb(var(--color-border) / <alpha-value>)",
+        "on-dark": "rgb(var(--color-on-dark) / <alpha-value>)",
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
-        display: ["var(--font-display)", "ui-serif", "Georgia", "serif"],
+        heading: ["var(--font-heading)", "ui-serif", "Georgia", "serif"],
+        section: ["var(--font-section)", "ui-serif", "Georgia", "serif"],
+        body: ["var(--font-body)", "ui-serif", "Georgia", "serif"],
+        quote: ["var(--font-quote)", "ui-serif", "Georgia", "serif"],
+        countdown: ["var(--font-countdown)", "ui-serif", "Georgia", "serif"],
+        button: ["var(--font-button)", "ui-sans-serif", "system-ui", "sans-serif"],
+        script: ["var(--font-script)", "cursive"],
       },
       borderRadius: {
-        "4xl": "2rem",
-        "5xl": "2.5rem",
+        card: "var(--radius-card)",
+        media: "var(--radius-media)",
+        control: "var(--radius-control)",
       },
       boxShadow: {
-        soft: "0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px rgb(15 23 42 / 0.06)",
-        glass:
-          "0 1px 1px rgb(255 255 255 / 0.5) inset, 0 10px 40px -12px rgb(30 58 138 / 0.25)",
-        lift: "0 20px 50px -20px rgb(30 58 138 / 0.35)",
-        glow: "0 0 0 1px rgb(255 255 255 / 0.4) inset, 0 18px 60px -20px rgb(56 189 248 / 0.45)",
+        soft: "var(--shadow-soft)",
+        card: "var(--shadow-card)",
+        lift: "var(--shadow-lift)",
+      },
+      backgroundImage: {
+        "gradient-accent": "var(--gradient-accent)",
       },
       keyframes: {
         "gradient-pan": {
@@ -51,8 +57,8 @@ const config: Config = {
         },
       },
       animation: {
-        "gradient-pan": "gradient-pan 18s ease infinite",
-        shimmer: "shimmer 1.6s ease-in-out infinite",
+        "gradient-pan": "gradient-pan 20s ease infinite",
+        shimmer: "shimmer 1.8s ease-in-out infinite",
       },
       transitionTimingFunction: {
         "out-expo": "cubic-bezier(0.16, 1, 0.3, 1)",

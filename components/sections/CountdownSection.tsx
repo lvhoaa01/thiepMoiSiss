@@ -11,17 +11,16 @@ import { siteConfig } from "@/config/site.config";
 import { useCountdown } from "@/hooks/useCountdown";
 import { buildMonthMatrix } from "@/utils/calendar";
 import { pad2 } from "@/utils/format";
-import { cn } from "@/utils/cn";
 
 function CountdownTile({ value, label }: { value: number; label: string }) {
   const display = pad2(value);
   return (
     <div className="flex flex-col items-center">
-      <div className="relative grid h-16 w-16 place-items-center overflow-hidden rounded-2xl bg-navy text-primary-foreground shadow-lift sm:h-20 sm:w-20">
+      <div className="relative grid aspect-square w-full place-items-center overflow-hidden rounded-media bg-primary text-on-dark shadow-card">
         <AnimatePresence initial={false}>
           <motion.span
             key={display}
-            className="absolute inset-0 grid place-items-center text-2xl font-bold tabular-nums sm:text-3xl"
+            className="absolute inset-0 grid place-items-center font-countdown text-2xl font-bold tabular-nums sm:text-3xl"
             initial={{ y: "100%", opacity: 0 }}
             animate={{ y: "0%", opacity: 1 }}
             exit={{ y: "-100%", opacity: 0 }}
@@ -31,7 +30,7 @@ function CountdownTile({ value, label }: { value: number; label: string }) {
           </motion.span>
         </AnimatePresence>
       </div>
-      <span className="mt-2 text-xs font-medium uppercase tracking-wide text-subtle">
+      <span className="mt-2.5 font-button text-xs font-medium tracking-wide text-subtle">
         {label}
       </span>
     </div>
@@ -55,28 +54,37 @@ export function CountdownSection() {
   ];
 
   return (
-    <section id="countdown" className="relative px-4 py-20 sm:py-24">
+    <section id="countdown" className="relative px-4 py-24 sm:py-28">
       <div className="mx-auto max-w-2xl">
-        <SectionHeading title={text.countdown.title} subtitle={text.countdown.subtitle} />
+        <SectionHeading
+          scriptLabel={text.countdown.scriptLabel}
+          title={text.countdown.title}
+          subtitle={text.countdown.subtitle}
+        />
 
         <Reveal className="mt-10">
-          <GlassCard strong className="overflow-hidden p-5 sm:p-8">
+          <GlassCard strong className="overflow-hidden p-5 sm:p-9">
+            {/* Big date */}
+            <div className="text-center">
+              <p className="font-body text-sm text-subtle">
+                {event.weekdayLabel} · {event.timeLabel}
+              </p>
+              <p className="text-gradient mt-1 font-heading text-4xl font-bold sm:text-5xl">
+                {event.dateLabel}
+              </p>
+            </div>
+
             {/* Calendar */}
-            <div className="rounded-3xl bg-white/60 p-4 sm:p-5">
-              <div className="mb-4 flex items-baseline justify-between rounded-2xl bg-navy px-5 py-3 text-primary-foreground">
-                <span className="font-display text-xl font-semibold sm:text-2xl">
-                  {text.countdown.monthLabelPrefix} {pad2(event.calendar.month)}
-                </span>
-                <span className="font-display text-xl font-semibold sm:text-2xl">
-                  {event.calendar.year}
-                </span>
-              </div>
+            <div className="mx-auto mt-8 max-w-md rounded-media bg-background/60 p-3 sm:p-5">
+              <p className="mb-3 text-center font-heading text-lg font-semibold text-primary">
+                {text.countdown.monthLabelPrefix} {pad2(event.calendar.month)}, {event.calendar.year}
+              </p>
 
               <div className="grid grid-cols-7 gap-1 text-center">
                 {text.countdown.weekdays.map((weekday) => (
                   <div
                     key={weekday}
-                    className="py-1 text-xs font-semibold text-subtle sm:text-sm"
+                    className="pb-1 font-button text-[0.7rem] font-semibold text-accent sm:text-xs"
                   >
                     {weekday}
                   </div>
@@ -88,21 +96,22 @@ export function CountdownSection() {
                     return (
                       <div
                         key={`${weekIndex}-${dayIndex}`}
-                        className="flex items-center justify-center py-1"
+                        className="relative flex aspect-square items-center justify-center"
                       >
                         {day === null ? (
                           <span className="select-none text-subtle/30">·</span>
                         ) : isHighlight ? (
-                          <span className="relative mx-auto grid h-9 w-9 place-items-center rounded-full bg-primary text-sm font-bold text-primary-foreground shadow-md sm:h-10 sm:w-10">
-                            {day}
-                            <span className="absolute -top-2 left-1/2 grid h-4 w-4 -translate-x-1/2 place-items-center rounded-full bg-white text-primary shadow">
-                              <GraduationCap className="h-3 w-3" aria-hidden />
+                          <>
+                            <span className="absolute inset-[15%] rounded-full bg-accent shadow-md" />
+                            <span className="relative font-body text-xs font-bold text-on-dark sm:text-sm">
+                              {day}
                             </span>
-                          </span>
+                            <span className="absolute -top-1 left-1/2 grid h-4 w-4 -translate-x-1/2 place-items-center rounded-full bg-surface text-accent shadow">
+                              <GraduationCap className="h-2.5 w-2.5" aria-hidden />
+                            </span>
+                          </>
                         ) : (
-                          <span className="grid h-9 w-9 place-items-center text-sm text-ink/80 sm:h-10 sm:w-10">
-                            {day}
-                          </span>
+                          <span className="font-body text-xs text-ink/80 sm:text-sm">{day}</span>
                         )}
                       </div>
                     );
@@ -112,15 +121,15 @@ export function CountdownSection() {
             </div>
 
             {/* Countdown */}
-            <div className="mt-8">
+            <div className="mt-9">
               {!mounted ? (
-                <div className="flex justify-center gap-3 sm:gap-4" aria-hidden>
+                <div className="mx-auto grid max-w-md grid-cols-4 gap-2 sm:gap-3" aria-hidden>
                   {units.map((unit) => (
                     <div key={unit.label} className="flex flex-col items-center">
-                      <div className="grid h-16 w-16 place-items-center rounded-2xl bg-navy/80 text-2xl font-bold text-primary-foreground sm:h-20 sm:w-20">
+                      <div className="grid aspect-square w-full place-items-center rounded-media bg-primary/80 font-countdown text-2xl font-bold text-on-dark sm:text-3xl">
                         --
                       </div>
-                      <span className="mt-2 text-xs font-medium uppercase tracking-wide text-subtle">
+                      <span className="mt-2.5 font-button text-xs font-medium tracking-wide text-subtle">
                         {unit.label}
                       </span>
                     </div>
@@ -128,16 +137,14 @@ export function CountdownSection() {
                 </div>
               ) : timeLeft.isComplete ? (
                 <p
-                  className={cn(
-                    "rounded-2xl bg-primary/10 px-6 py-6 text-center font-display text-xl font-semibold text-navy sm:text-2xl",
-                  )}
+                  className="rounded-media bg-accent/12 px-6 py-6 text-center font-heading text-xl font-semibold text-primary sm:text-2xl"
                   role="status"
                 >
                   {text.countdown.finished}
                 </p>
               ) : (
                 <div
-                  className="flex justify-center gap-3 sm:gap-4"
+                  className="mx-auto grid max-w-md grid-cols-4 gap-2 sm:gap-3"
                   role="timer"
                   aria-live="off"
                 >

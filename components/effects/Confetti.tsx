@@ -5,7 +5,7 @@ import { useMemo } from "react";
 
 import { cn } from "@/utils/cn";
 
-const COLORS = ["#2563EB", "#38BDF8", "#1E3A8A", "#EAB308", "#F8FBFF", "#93C5FD"];
+const COLORS = ["#B0894B", "#D8B978", "#9C7636", "#F7F0E4", "#C9A65A", "#E9DEC9"];
 
 /** Deterministic pseudo-random in [0,1). */
 function seeded(n: number): number {

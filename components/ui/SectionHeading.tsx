@@ -1,25 +1,38 @@
+import { Flourish } from "@/components/illustrations/Flourish";
 import { Reveal } from "@/components/ui/Reveal";
 import { cn } from "@/utils/cn";
 
 interface SectionHeadingProps {
+  /** Decorative cursive accent (usually English), e.g. "Save the Date". */
+  scriptLabel?: string;
   title: string;
   subtitle?: string;
   className?: string;
 }
 
-/** Shared centered section title + supporting line. */
-export function SectionHeading({ title, subtitle, className }: SectionHeadingProps) {
+/** Consistent editorial section header: script accent + serif title + flourish. */
+export function SectionHeading({
+  scriptLabel,
+  title,
+  subtitle,
+  className,
+}: SectionHeadingProps) {
   return (
     <Reveal className={cn("text-center", className)}>
-      <h2 className="font-display text-3xl font-bold tracking-tight text-navy sm:text-4xl">
+      {scriptLabel ? (
+        <p className="font-script text-4xl leading-none text-accent sm:text-5xl">
+          {scriptLabel}
+        </p>
+      ) : null}
+      <h2 className="mt-3 font-heading text-3xl font-semibold tracking-tight text-primary sm:text-[2.5rem]">
         {title}
       </h2>
       {subtitle ? (
-        <p className="mx-auto mt-3 max-w-md text-balance text-sm text-subtle sm:text-base">
+        <p className="mx-auto mt-3 max-w-md text-balance font-body text-[0.95rem] leading-relaxed text-subtle">
           {subtitle}
         </p>
       ) : null}
-      <div className="mx-auto mt-5 h-px w-20 bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+      <Flourish className="mx-auto mt-6 h-5 w-40 text-accent/70" />
     </Reveal>
   );
 }

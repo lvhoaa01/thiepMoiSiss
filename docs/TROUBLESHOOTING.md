@@ -39,11 +39,21 @@
 - Music starts on the **first tap** (opening the envelope) to satisfy browser
   autoplay rules. If the intro is disabled, use the top-right toggle.
 
-## Guest name shows "Quý khách"
+## Guest name shows the default (no type/time)
 
-- That's the default when there's no `?guest=`. Add it to the URL, e.g.
-  `?guest=NguyenVanA` or an encoded full name
-  `?guest=Nguy%E1%BB%85n%20V%C4%83n%20A`.
+- No `?guest=` → shows `identity.defaultGuestName`. Add it, e.g.
+  `?guest=NguyenThienTai` or an encoded full name.
+- Shows the name but **no invitation type/time** → the value didn't match any
+  row in `graPlan.csv`. Matching is diacritic-insensitive and tolerates
+  honorifics; check the name exists in the CSV.
+- Edited `graPlan.csv`? It's read at **build time** — restart `npm run dev` or
+  redeploy.
+
+## Gallery is empty
+
+- Ensure images are in `public/gallery/` (`.jpg/.png/.webp/.avif/.gif`). They're
+  listed at build time, so restart dev / redeploy after adding files.
+- Images are served/optimized via `next/image` from `/gallery/...`.
 
 ## Build or type errors
 

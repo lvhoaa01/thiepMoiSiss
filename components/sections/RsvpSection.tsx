@@ -23,7 +23,7 @@ interface RsvpSectionProps {
 }
 
 export function RsvpSection({ onSubmitted }: RsvpSectionProps) {
-  const { text, animation } = siteConfig;
+  const { text, motion: motionCfg } = siteConfig;
   const copy = text.rsvp;
 
   const [name, setName] = useState("");
@@ -42,8 +42,8 @@ export function RsvpSection({ onSubmitted }: RsvpSectionProps) {
     return Object.keys(nextErrors).length === 0;
   };
 
-  const handleSubmit = async (eventArg: FormEvent<HTMLFormElement>) => {
-    eventArg.preventDefault();
+  const handleSubmit = async (formEvent: FormEvent<HTMLFormElement>) => {
+    formEvent.preventDefault();
     if (status === "submitting") return;
     if (!validate()) return;
 
@@ -69,14 +69,18 @@ export function RsvpSection({ onSubmitted }: RsvpSectionProps) {
   };
 
   return (
-    <section id="rsvp" className="relative px-4 py-20 sm:py-24">
+    <section id="rsvp" className="relative px-4 py-24 sm:py-28">
       <div className="mx-auto max-w-xl">
-        <SectionHeading title={copy.title} subtitle={copy.subtitle} />
+        <SectionHeading
+          scriptLabel={copy.scriptLabel}
+          title={copy.title}
+          subtitle={copy.subtitle}
+        />
 
         <Reveal className="mt-10">
-          <GlassCard strong className="relative overflow-hidden p-6 sm:p-8">
+          <GlassCard strong className="relative overflow-hidden p-6 sm:p-9">
             {status === "success" ? (
-              <Confetti variant="burst" count={animation.confettiCount} />
+              <Confetti variant="burst" count={motionCfg.confettiCount} />
             ) : null}
 
             <AnimatePresence mode="wait">
@@ -90,21 +94,21 @@ export function RsvpSection({ onSubmitted }: RsvpSectionProps) {
                   transition={{ duration: 0.4 }}
                 >
                   <motion.span
-                    className="grid h-16 w-16 place-items-center rounded-full bg-primary/12 text-primary"
+                    className="grid h-16 w-16 place-items-center rounded-full bg-accent/12 text-accent"
                     initial={{ scale: 0, rotate: -20 }}
                     animate={{ scale: 1, rotate: 0 }}
                     transition={{ type: "spring", stiffness: 220, damping: 14 }}
                   >
                     <CheckCircle2 className="h-9 w-9" aria-hidden />
                   </motion.span>
-                  <h3 className="mt-5 font-display text-2xl font-semibold text-navy">
+                  <h3 className="mt-5 font-heading text-2xl font-semibold text-primary">
                     {copy.successTitle}
                   </h3>
-                  <p className="mt-2 text-sm text-subtle">{copy.successBody}</p>
+                  <p className="mt-2 font-body text-sm text-subtle">{copy.successBody}</p>
                   <button
                     type="button"
                     onClick={resetForm}
-                    className="mt-6 text-sm font-medium text-primary underline-offset-4 hover:underline"
+                    className="mt-6 font-button text-sm font-medium text-accent underline-offset-4 hover:underline"
                   >
                     {copy.sendAnother}
                   </button>
@@ -171,16 +175,12 @@ export function RsvpSection({ onSubmitted }: RsvpSectionProps) {
                   </Field>
 
                   {status === "error" ? (
-                    <p className="text-sm font-medium text-rose-500" role="alert">
+                    <p className="font-button text-sm font-medium text-red-600" role="alert">
                       {copy.errorGeneric}
                     </p>
                   ) : null}
 
-                  <RippleButton
-                    type="submit"
-                    disabled={status === "submitting"}
-                    className="w-full"
-                  >
+                  <RippleButton type="submit" disabled={status === "submitting"} className="w-full">
                     {status === "submitting" ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin" aria-hidden />

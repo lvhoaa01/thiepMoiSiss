@@ -1,25 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Be_Vietnam_Pro, Playfair_Display } from "next/font/google";
 
+import { fontClassNames, fontRoleVars } from "@/config/fonts";
 import { siteConfig } from "@/config/site.config";
 
 import "./globals.css";
-
-/** Body / UI font — first-class Vietnamese diacritics. */
-const sans = Be_Vietnam_Pro({
-  subsets: ["latin", "vietnamese"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-sans",
-  display: "swap",
-});
-
-/** Elegant display serif for names & section titles. */
-const display = Playfair_Display({
-  subsets: ["latin", "vietnamese"],
-  weight: ["500", "600", "700", "800"],
-  variable: "--font-display",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.meta.siteUrl),
@@ -45,25 +29,46 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  // Allow zoom for accessibility.
   maximumScale: 5,
-  themeColor: "#ffffff",
+  themeColor: "#FAF6EF",
 };
 
 /** Strongly-typed CSS custom properties (no `any`). */
 type CSSVars = React.CSSProperties & Record<`--${string}`, string>;
 
+/** Build every theme CSS variable from config (colors, gradient, radius, shadow, motion). */
 function buildThemeVars(): CSSVars {
-  const c = siteConfig.theme.colors;
+  const { colors, gradient, radius, shadow } = siteConfig.theme;
+  const { durations, delayStep } = siteConfig.motion;
+
   return {
-    "--color-primary": c.primary,
-    "--color-primary-foreground": c.primaryForeground,
-    "--color-navy": c.navy,
-    "--color-sky": c.sky,
-    "--color-ink": c.ink,
-    "--color-subtle": c.subtle,
-    "--color-surface": c.surface,
-    "--color-surface-2": c.surface2,
+    "--color-primary": colors.primary,
+    "--color-secondary": colors.secondary,
+    "--color-accent": colors.accent,
+    "--color-accent-soft": colors.accentSoft,
+    "--color-background": colors.background,
+    "--color-surface": colors.surface,
+    "--color-ink": colors.ink,
+    "--color-subtle": colors.subtle,
+    "--color-border": colors.border,
+    "--color-on-dark": colors.onDark,
+
+    "--gradient-accent": gradient,
+
+    "--radius-card": radius.card,
+    "--radius-media": radius.media,
+    "--radius-control": radius.control,
+
+    "--shadow-soft": shadow.soft,
+    "--shadow-card": shadow.card,
+    "--shadow-lift": shadow.lift,
+
+    "--dur-fast": `${durations.fast}s`,
+    "--dur-base": `${durations.base}s`,
+    "--dur-slow": `${durations.slow}s`,
+    "--delay-step": `${delayStep}s`,
+
+    ...fontRoleVars,
   };
 }
 
@@ -71,7 +76,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="vi" className={`${sans.variable} ${display.variable}`}>
+    <html lang="vi" className={fontClassNames}>
       <body style={buildThemeVars()}>{children}</body>
     </html>
   );

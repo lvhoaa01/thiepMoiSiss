@@ -21,17 +21,19 @@ interface GuestbookSectionProps {
 
 function WishCard({ wish }: { wish: Wish }) {
   return (
-    <article className="glass rounded-3xl p-5">
+    <article className="card rounded-card p-5">
       <div className="flex items-center gap-3">
-        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
+        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent font-heading text-sm font-bold text-on-dark">
           {getInitials(wish.name)}
         </span>
         <div className="min-w-0">
-          <p className="truncate font-semibold text-navy">{wish.name}</p>
-          <p className="text-xs text-subtle">{formatTimestamp(wish.timestamp)}</p>
+          <p className="truncate font-heading text-base font-semibold text-primary">
+            {wish.name}
+          </p>
+          <p className="font-button text-xs text-subtle">{formatTimestamp(wish.timestamp)}</p>
         </div>
       </div>
-      <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-ink/90">
+      <p className="mt-3 whitespace-pre-line font-body text-sm leading-relaxed text-ink/90">
         {wish.message}
       </p>
     </article>
@@ -39,8 +41,7 @@ function WishCard({ wish }: { wish: Wish }) {
 }
 
 export function GuestbookSection({ reloadSignal }: GuestbookSectionProps) {
-  const { text } = siteConfig;
-  const copy = text.guestbook;
+  const copy = siteConfig.text.guestbook;
   const prefersReduced = usePrefersReducedMotion();
 
   const [status, setStatus] = useState<FetchStatus>("loading");
@@ -86,30 +87,34 @@ export function GuestbookSection({ reloadSignal }: GuestbookSectionProps) {
   const hasWishes = status === "success" && wishes.length > 0;
 
   return (
-    <section id="guestbook" className="relative px-4 py-20 sm:py-24">
+    <section id="guestbook" className="relative px-4 py-24 sm:py-28">
       <div className="mx-auto max-w-xl">
-        <SectionHeading title={copy.title} subtitle={copy.subtitle} />
+        <SectionHeading
+          scriptLabel={copy.scriptLabel}
+          title={copy.title}
+          subtitle={copy.subtitle}
+        />
 
         <Reveal className="mt-10">
           {status === "loading" ? (
-            <div className="flex items-center justify-center gap-2 py-16 text-subtle">
+            <div className="flex items-center justify-center gap-2 py-16 font-body text-subtle">
               <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
               <span>{copy.loading}</span>
             </div>
           ) : status === "error" ? (
             <div className="flex flex-col items-center gap-4 py-16 text-center">
-              <p className="text-sm text-subtle">{copy.error}</p>
+              <p className="font-body text-sm text-subtle">{copy.error}</p>
               <button
                 type="button"
                 onClick={() => void load()}
-                className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-5 py-2.5 text-sm font-medium text-primary tap-transparent"
+                className="inline-flex items-center gap-2 rounded-full bg-accent/12 px-5 py-2.5 font-button text-sm font-medium text-accent tap-transparent"
               >
                 <RotateCw className="h-4 w-4" aria-hidden />
                 {copy.retry}
               </button>
             </div>
           ) : !hasWishes ? (
-            <p className="py-16 text-center text-sm text-subtle">{copy.empty}</p>
+            <p className="py-16 text-center font-body text-sm text-subtle">{copy.empty}</p>
           ) : prefersReduced ? (
             <div className="no-scrollbar max-h-[30rem] space-y-4 overflow-y-auto">
               {wishes.map((wish, index) => (

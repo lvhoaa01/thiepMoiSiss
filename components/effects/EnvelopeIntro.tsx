@@ -16,10 +16,10 @@ interface EnvelopeIntroProps {
 }
 
 /**
- * Full-screen opening sequence: a sealed envelope the guest taps to open. The
- * flap lifts, the invitation card rises out, confetti falls, then the overlay
- * fades to reveal the hero. The tap doubles as the user gesture required to
- * begin background music.
+ * Full-screen opening sequence. The opaque overlay fully hides the invitation
+ * until the guest taps to open: the flap lifts, a minimal card rises, gold
+ * confetti falls, then the overlay fades to reveal the hero. The tap doubles as
+ * the user gesture required to begin background music.
  */
 export function EnvelopeIntro({ onOpen, onComplete }: EnvelopeIntroProps) {
   const prefersReduced = usePrefersReducedMotion();
@@ -29,17 +29,17 @@ export function EnvelopeIntro({ onOpen, onComplete }: EnvelopeIntroProps) {
     if (opening) return;
     onOpen();
     setOpening(true);
-    const duration = prefersReduced ? 600 : siteConfig.animation.introDurationMs;
+    const duration = prefersReduced ? 600 : siteConfig.motion.introDurationMs;
     window.setTimeout(onComplete, duration);
   }, [opening, onOpen, onComplete, prefersReduced]);
 
   const fadeDelay = prefersReduced
     ? 0.15
-    : siteConfig.animation.introDurationMs / 1000 - 0.8;
+    : siteConfig.motion.introDurationMs / 1000 - 0.8;
 
   return (
     <motion.div
-      className="fixed inset-0 z-[60] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-surface via-white to-surface-2 px-6"
+      className="fixed inset-0 z-[60] flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-background via-surface to-background px-6"
       initial={{ opacity: 1 }}
       animate={{ opacity: opening ? 0 : 1 }}
       transition={{ duration: prefersReduced ? 0.4 : 0.7, delay: opening ? fadeDelay : 0 }}
@@ -48,11 +48,11 @@ export function EnvelopeIntro({ onOpen, onComplete }: EnvelopeIntroProps) {
       aria-label={siteConfig.identity.invitationTitle}
     >
       {opening && !prefersReduced ? (
-        <Confetti variant="fall" count={siteConfig.animation.confettiCount} />
+        <Confetti variant="fall" count={siteConfig.motion.confettiCount} />
       ) : null}
 
       <motion.p
-        className="mb-10 text-sm font-medium uppercase tracking-[0.3em] text-subtle"
+        className="mb-10 font-button text-xs font-medium text-subtle overline"
         animate={{ opacity: opening ? 0 : 1, y: opening ? -8 : 0 }}
         transition={{ duration: 0.4 }}
       >
@@ -67,11 +67,11 @@ export function EnvelopeIntro({ onOpen, onComplete }: EnvelopeIntroProps) {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
         {/* envelope back */}
-        <div className="absolute inset-0 rounded-[1.4rem] bg-gradient-to-br from-[#1E3A8A] to-[#2563EB] shadow-2xl" />
+        <div className="absolute inset-0 rounded-[1.4rem] bg-gradient-to-br from-[#3A342E] to-[#26211D] shadow-2xl" />
 
         {/* rising letter (behind the front pocket) */}
         <motion.div
-          className="absolute left-1/2 top-3 z-10 w-60 rounded-xl bg-white p-4 text-center shadow-lg"
+          className="absolute left-1/2 top-3 z-10 w-60 rounded-xl bg-[#FDFBF6] p-4 text-center shadow-lg"
           initial={{ x: "-50%", y: 8 }}
           animate={{
             x: "-50%",
@@ -80,23 +80,25 @@ export function EnvelopeIntro({ onOpen, onComplete }: EnvelopeIntroProps) {
           }}
           transition={{ duration: 0.9, delay: opening ? 0.55 : 0, ease: [0.16, 1, 0.3, 1] }}
         >
-          <GraduationCap className="mx-auto h-7 w-7 text-primary" aria-hidden />
-          <p className="mt-2 font-display text-lg font-semibold text-navy">
+          <GraduationCap className="mx-auto h-7 w-7 text-accent" aria-hidden />
+          <p className="mt-2 font-heading text-lg font-semibold text-primary">
             {siteConfig.identity.invitationTitle}
           </p>
-          <div className="mx-auto mt-2 h-px w-16 bg-primary/30" />
-          <p className="mt-2 text-xs text-subtle">{siteConfig.identity.graduateName}</p>
+          <div className="mx-auto mt-2 h-px w-16 bg-accent/40" />
+          <p className="mt-2 font-body text-xs text-subtle">
+            {siteConfig.identity.graduateName}
+          </p>
         </motion.div>
 
         {/* front pocket */}
         <div
-          className="absolute inset-0 z-30 rounded-[1.4rem] bg-gradient-to-br from-[#2563EB] to-[#1E40AF]"
+          className="absolute inset-0 z-30 rounded-[1.4rem] bg-gradient-to-br from-[#2B2722] to-[#1B1815]"
           style={{ clipPath: "polygon(0% 32%, 50% 70%, 100% 32%, 100% 100%, 0% 100%)" }}
         />
 
         {/* flap */}
         <motion.div
-          className="absolute inset-x-0 top-0 z-40 h-[62%] bg-gradient-to-br from-[#0C1B38] to-[#1E3A8A]"
+          className="absolute inset-x-0 top-0 z-40 h-[62%] bg-gradient-to-br from-[#1B1815] to-[#2B2722]"
           style={{
             clipPath: "polygon(0% 0%, 100% 0%, 50% 92%)",
             transformOrigin: "top",
@@ -112,14 +114,9 @@ export function EnvelopeIntro({ onOpen, onComplete }: EnvelopeIntroProps) {
 
         {/* wax seal */}
         <motion.div
-          className="absolute left-1/2 top-[42%] z-50 grid h-12 w-12 place-items-center rounded-full bg-white/95 text-primary shadow-md"
+          className="absolute left-1/2 top-[42%] z-50 grid h-12 w-12 place-items-center rounded-full bg-accent text-on-dark shadow-md"
           initial={{ x: "-50%", y: "-50%", scale: 1, opacity: 1 }}
-          animate={{
-            x: "-50%",
-            y: "-50%",
-            scale: opening ? 0 : 1,
-            opacity: opening ? 0 : 1,
-          }}
+          animate={{ x: "-50%", y: "-50%", scale: opening ? 0 : 1, opacity: opening ? 0 : 1 }}
           transition={{ duration: 0.4, delay: opening ? 0.05 : 0 }}
         >
           <GraduationCap className="h-6 w-6" aria-hidden />
@@ -132,7 +129,7 @@ export function EnvelopeIntro({ onOpen, onComplete }: EnvelopeIntroProps) {
         onClick={handleOpen}
         autoFocus
         aria-label={siteConfig.text.hero.openEnvelope}
-        className="mt-12 inline-flex items-center gap-2 rounded-full bg-primary px-8 py-3.5 text-sm font-semibold text-primary-foreground shadow-lift tap-transparent"
+        className="mt-12 inline-flex items-center gap-2 rounded-full bg-accent px-8 py-3.5 font-button text-sm font-semibold tracking-wide text-on-dark shadow-lift tap-transparent"
         animate={{ opacity: opening ? 0 : 1, y: opening ? 10 : 0 }}
         transition={{ duration: 0.4 }}
         whileHover={{ scale: 1.04, y: -2 }}

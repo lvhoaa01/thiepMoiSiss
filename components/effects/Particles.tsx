@@ -12,32 +12,32 @@ function seeded(n: number): number {
   return value - Math.floor(value);
 }
 
-/** Subtle drifting light particles that add depth behind the content. */
+/** Subtle drifting gold "dust" that adds depth behind the content. */
 export function Particles() {
   const prefersReduced = usePrefersReducedMotion();
-  const count = siteConfig.animation.particleCount;
+  const count = siteConfig.motion.particleCount;
 
   const particles = useMemo(
     () =>
       Array.from({ length: count }, (_, index) => ({
         left: seeded(index + 1) * 100,
         top: seeded(index + 2) * 100,
-        size: 3 + seeded(index + 3) * 6,
-        duration: 6 + seeded(index + 4) * 8,
+        size: 2 + seeded(index + 3) * 5,
+        duration: 7 + seeded(index + 4) * 9,
         delay: seeded(index + 5) * -10,
-        drift: (seeded(index + 6) - 0.5) * 40,
+        drift: (seeded(index + 6) - 0.5) * 36,
       })),
     [count],
   );
 
-  if (prefersReduced || !siteConfig.animation.enabled) return null;
+  if (prefersReduced || !siteConfig.motion.enabled) return null;
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
       {particles.map((particle, index) => (
         <motion.span
           key={index}
-          className="absolute rounded-full bg-sky/40"
+          className="absolute rounded-full bg-accent/40"
           style={{
             left: `${particle.left}%`,
             top: `${particle.top}%`,
@@ -48,8 +48,8 @@ export function Particles() {
           animate={{
             y: [0, -particle.drift, 0],
             x: [0, particle.drift, 0],
-            opacity: [0, 0.7, 0],
-            scale: [0.8, 1.2, 0.8],
+            opacity: [0, 0.6, 0],
+            scale: [0.8, 1.15, 0.8],
           }}
           transition={{
             duration: particle.duration,

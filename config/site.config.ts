@@ -2,56 +2,63 @@ import type { SiteConfig } from "@/types";
 
 /**
  * ============================================================================
- *  SINGLE SOURCE OF TRUTH
+ *  SINGLE SOURCE OF TRUTH  (visual + content)
  * ============================================================================
- *  Edit ONLY this file to re-skin / re-content the entire invitation:
- *  names, dates, address, phone, colors, music, animation, every UI string.
+ *  Edit ONLY this file to re-skin / re-content the invitation:
+ *  names, date, address, phone, map, THEME (colors · gradient · radius ·
+ *  shadow · motion), and every UI string.
  *
- *  Nothing else in the app hard-codes content. See `docs/CONFIGURATION.md`.
+ *  Fonts are configured in `config/fonts.ts` (next/font needs static imports).
+ *  See `docs/CONFIGURATION.md`.
  * ============================================================================
  */
 
-// Used to build both the embedded map and the external "open in Maps" link
-// from one place. Replace with your exact place/address (or paste full URLs
-// from Google Maps → Share into `maps` below).
-const MAP_QUERY = "Km 9 Nguyễn Trãi, Đại Mỗ, Hà Nội";
+// Venue used to build both the embedded map and the external link.
+const MAP_QUERY = "Trường Đại học Hà Nội, Km 9 Nguyễn Trãi, Nam Từ Liêm, Hà Nội";
+const MAP_ZOOM = 16;
 
 export const siteConfig: SiteConfig = {
   /* ─────────────────────────── SEO / metadata ────────────────────────── */
   meta: {
     title: "Thư mời tốt nghiệp · Nguyễn Phương Anh",
     description:
-      "Trân trọng kính mời bạn đến tham dự lễ tốt nghiệp của Nguyễn Phương Anh.",
+      "Trân trọng kính mời bạn đến chung vui trong lễ tốt nghiệp của Nguyễn Phương Anh.",
     locale: "vi_VN",
-    // Set to your real deployed origin (used for OpenGraph / metadataBase).
-    siteUrl: "https://thiep-moi-siss.vercel.app/",
+    siteUrl: "https://graduation-invitation.vercel.app",
   },
 
   /* ───────────────────────────── Identity ────────────────────────────── */
   identity: {
-    invitationTitle: "Thư mời tham dự",
+    invitationTitle: "Thư mời tốt nghiệp",
     ceremonyLabel: "Lễ tốt nghiệp của",
-    graduateName: "NGUYỄN PHƯƠNG ANH",
-    guestPrefix: "Hân hạnh mời",
-    defaultGuestName: "Quý khách",
+    graduateName: "Nguyễn Phương Anh",
+    degreeLabel: "Tân Cử nhân",
+    schoolLabel: "Trường Đại học Hà Nội",
+    guestPrefix: "Trân trọng kính mời",
+    defaultGuestName: "Quý vị",
+    // Optional: set to a path under /public for a full-bleed hero photo.
+    heroImage: undefined,
   },
 
   /* ────────────────────────────── Event ──────────────────────────────── */
   event: {
-    dateLabel: "10/07/2026",
+    dateLabel: "10.07.2026",
     timeLabel: "15:40 - 16:50",
+    weekdayLabel: "Thứ Sáu",
     address: ["Km 9, đường Nguyễn Trãi", "phường Đại Mỗ", "Hà Nội"],
+    venueName: "Trường Đại học Hà Nội",
     phone: "0394536855",
-    // ISO 8601 WITH timezone. +07:00 = Vietnam. Drives the live countdown.
     countdownTargetISO: "2026-07-10T15:40:00+07:00",
     calendar: { year: 2026, month: 7, highlightDay: 10 },
   },
 
   /* ────────────────────────────── Maps ───────────────────────────────── */
   maps: {
-    embedUrl: `https://www.google.com/maps?q=${encodeURIComponent(
+    query: MAP_QUERY,
+    zoom: MAP_ZOOM,
+    embedUrl: `https://maps.google.com/maps?q=${encodeURIComponent(
       MAP_QUERY,
-    )}&output=embed`,
+    )}&z=${MAP_ZOOM}&t=m&output=embed`,
     externalUrl: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
       MAP_QUERY,
     )}`,
@@ -59,75 +66,134 @@ export const siteConfig: SiteConfig = {
 
   /* ───────────────────────── Backend (API) ───────────────────────────── */
   api: {
-    // Prefer the env override (see .env.example); otherwise paste your URL here.
     appsScriptUrl:
       process.env.NEXT_PUBLIC_APPS_SCRIPT_URL ??
-      "https://script.google.com/macros/s/AKfycbwJwi2q9XHGpVtQ1Xq3Hjz0yhx5_9_ZgD4QcSbI0UOSxW1THsTaN7KkXGLfWy55aFCF/exec",
+      "https://script.google.com/macros/s/REPLACE_WITH_YOUR_DEPLOYMENT_ID/exec",
   },
 
   /* ────────────────────────────── Music ──────────────────────────────── */
   music: {
-    // Ships with a silent placeholder so the toggle works with zero 404s.
-    // Replace public/music/background.wav with your own track (any browser
-    // audio format) and update this path. See public/music/README.md.
     src: "/music/I_Love_You_3000.mp3",
     enabledByDefault: true,
     volume: 0.35,
   },
 
   /* ────────────────────────────── Theme ──────────────────────────────── */
-  // Each color is a space-separated RGB triple ("R G B"). Change `primary`
-  // to re-theme buttons, accents and glow across the whole site.
+  // Academic palette: charcoal + champagne gold + ivory. Each color is a
+  // space-separated RGB triple ("R G B") so Tailwind can apply opacity.
   theme: {
     colors: {
-      primary: "37 99 235", // blue-600
-      primaryForeground: "255 255 255", // white
-      navy: "12 27 56", // deep navy
-      sky: "56 189 248", // sky-400
-      ink: "15 23 42", // slate-900 (body text)
-      subtle: "100 116 139", // slate-500 (muted text)
-      surface: "248 251 255", // near-white page background
-      surface2: "234 243 255", // light-blue panel
+      primary: "38 33 29", // charcoal / espresso
+      secondary: "125 106 90", // warm taupe
+      accent: "176 137 75", // champagne gold
+      accentSoft: "216 185 120", // light gold
+      background: "250 246 239", // ivory page
+      surface: "255 253 249", // warm white card
+      ink: "43 39 34", // body text
+      subtle: "138 124 110", // muted text
+      border: "223 209 186", // hairline
+      onDark: "247 240 228", // cream on dark
+    },
+    gradient: "linear-gradient(100deg, #9C7636, #D8B978 46%, #B0894B)",
+    radius: { card: "1.75rem", media: "1.25rem", control: "0.85rem" },
+    shadow: {
+      soft: "0 1px 2px rgb(43 39 34 / 0.04), 0 8px 24px rgb(43 39 34 / 0.06)",
+      card: "0 2px 6px rgb(43 39 34 / 0.05), 0 24px 60px -28px rgb(43 39 34 / 0.26)",
+      lift: "0 34px 80px -34px rgb(43 39 34 / 0.42)",
     },
   },
 
-  /* ──────────────────────────── Animation ────────────────────────────── */
-  animation: {
+  /* ──────────────────────────── Motion ───────────────────────────────── */
+  motion: {
     enabled: true,
     introEnabled: true,
-    introDurationMs: 2600,
-    confettiCount: 90,
-    flowerCount: 14,
-    particleCount: 26,
+    introDurationMs: 2800,
+    speed: 1,
+    durations: { fast: 0.35, base: 0.7, slow: 1.1 },
+    delayStep: 0.09,
+    confettiCount: 70,
+    particleCount: 22,
     mouseGlow: true,
+  },
+
+  /* ────────────────────────────── Gallery ────────────────────────────── */
+  gallery: {
+    scriptLabel: "Our Memories",
+    title: "Khoảnh khắc đáng nhớ",
+    subtitle: "Những kỷ niệm trên chặng đường đã qua",
+  },
+
+  /* ────────────────────────────── Parking ────────────────────────────── */
+  parking: {
+    scriptLabel: "Parking",
+    title: "Hướng dẫn gửi xe",
+    subtitle: "Một vài lưu ý để việc di chuyển thuận tiện hơn",
+    mapImage: "/mapXe.jpg",
+    noteLabel: "Lưu ý",
+    car: {
+      title: "Gửi xe ô tô",
+      notes: [
+        "Đến cổng trường sẽ có bác bảo vệ hướng dẫn vị trí đỗ xe.",
+        "Do kế hoạch thi công tuyến đường từ đường Nguyễn Trãi vào Trường Đại học Hà Nội nên đường đi dành cho ô tô được điều chỉnh.",
+      ],
+      routeIn: {
+        label: "Chiều vào trường",
+        steps: ["Phùng Khoang", "Số 63 Phùng Khoang", "Rẽ phải", "Đi thẳng", "Cổng trong"],
+      },
+      routeOut: {
+        label: "Chiều ra",
+        steps: [
+          "Cổng trong",
+          "Sau nhà C",
+          "Nhà thờ Phùng Khoang",
+          "Đường Trung Văn",
+          "Đường Tố Hữu",
+          "Khuất Duy Tiến",
+        ],
+      },
+    },
+    motorbike: {
+      title: "Gửi xe máy",
+      locations: [
+        "Các nhà xe phía sau A1",
+        "Bên cạnh Hacha Coffee",
+        "Bên cạnh khu Giáo dục Thể chất",
+      ],
+    },
   },
 
   /* ─────────────────────────── UI copy (vi) ──────────────────────────── */
   text: {
     hero: {
       openEnvelope: "Mở thư mời",
-      scrollHint: "Cuộn xuống để khám phá",
+      scrollHint: "Cuộn để khám phá",
+      attendOffline: "Tham dự trực tiếp",
+      attendOnline: "Tham dự trực tuyến",
+      timeLabel: "Thời gian",
     },
     countdown: {
-      title: "Cùng đếm ngược thời gian",
-      subtitle: "Đến ngày trọng đại",
+      scriptLabel: "Save the Date",
+      title: "Đếm ngược ngày trọng đại",
+      subtitle: "Từng khoảnh khắc đến ngày đặc biệt",
       days: "Ngày",
       hours: "Giờ",
       minutes: "Phút",
       seconds: "Giây",
-      finished: "Lễ tốt nghiệp đã bắt đầu 🎓",
+      finished: "Lễ tốt nghiệp đã bắt đầu",
       weekdays: ["T2", "T3", "T4", "T5", "T6", "T7", "CN"],
       monthLabelPrefix: "Tháng",
     },
     location: {
-      title: "Xem dẫn đường",
-      subtitle: "Địa điểm tổ chức buổi lễ",
+      scriptLabel: "Location",
+      title: "Địa điểm tổ chức",
+      subtitle: "Nơi diễn ra buổi lễ tốt nghiệp",
       openMaps: "Mở Google Maps",
       hint: "Chạm vào bản đồ để xem chi tiết",
     },
     rsvp: {
+      scriptLabel: "R.S.V.P",
       title: "Xác nhận tham dự",
-      subtitle: "Sự hiện diện của bạn là niềm vinh hạnh của chúng tôi",
+      subtitle: "Sự hiện diện của bạn là niềm vinh hạnh của gia đình",
       nameLabel: "Họ và tên",
       namePlaceholder: "Nhập tên của bạn",
       attendanceLabel: "Bạn sẽ tham dự chứ?",
@@ -135,8 +201,8 @@ export const siteConfig: SiteConfig = {
       attendingYes: "Có, tôi sẽ đến",
       attendingNo: "Rất tiếc, tôi không thể đến",
       messageLabel: "Lời chúc",
-      messagePlaceholder: "Gửi lời chúc đến mình nhé...",
-      submit: "Gửi lời chúc của bạn",
+      messagePlaceholder: "Gửi lời chúc đến Phương Anh...",
+      submit: "Gửi lời chúc",
       submitting: "Đang gửi...",
       successTitle: "Cảm ơn bạn rất nhiều!",
       successBody: "Lời chúc của bạn đã được gửi đi thành công.",
@@ -148,28 +214,26 @@ export const siteConfig: SiteConfig = {
       },
     },
     guestbook: {
-      title: "Lời chúc của mọi người",
-      subtitle: "Những lời nhắn gửi yêu thương",
+      scriptLabel: "Wishes",
+      title: "Sổ lưu bút",
+      subtitle: "Những lời chúc yêu thương gửi đến Phương Anh",
       empty: "Hãy là người đầu tiên gửi lời chúc!",
       loading: "Đang tải lời chúc...",
       error: "Không tải được lời chúc. Vui lòng thử lại sau.",
       retry: "Thử lại",
     },
     closing: {
-      thankYou: "Thank you!",
+      scriptLabel: "Thank You",
+      thankYou: "Trân trọng cảm ơn",
       quote:
-        "Những cố gắng của em hôm nay cũng là nhờ sự đồng hành của mọi người. Mong được gặp thầy cô, bạn bè và gia đình trong ngày trọng đại này!",
+        "Những cố gắng của con hôm nay cũng là nhờ sự đồng hành của mọi người. Mong được gặp thầy cô, bạn bè và gia đình trong ngày trọng đại này.",
       contactLabel: "Liên hệ trực tiếp",
     },
-    music: {
-      play: "Bật nhạc nền",
-      pause: "Tắt nhạc nền",
-    },
+    music: { play: "Bật nhạc nền", pause: "Tắt nhạc nền" },
     backToTop: "Lên đầu trang",
   },
 
   /* ───────────────────────────── Socials ─────────────────────────────── */
-  // Optional. Example: { label: "Facebook", href: "https://...", icon: "facebook" }
   socials: [],
 };
 
