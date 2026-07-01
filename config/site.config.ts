@@ -36,6 +36,8 @@ export const siteConfig: SiteConfig = {
     schoolLabel: "Trường Đại học Hà Nội",
     guestPrefix: "Trân trọng kính mời",
     defaultGuestName: "Quý vị",
+    // Portrait photo shown in the hero medallion (place file in /public).
+    avatar: "/avatar1.png",
     // Optional: set to a path under /public for a full-bleed hero photo.
     heroImage: undefined,
   },
@@ -128,7 +130,7 @@ export const siteConfig: SiteConfig = {
     scriptLabel: "Parking",
     title: "Hướng dẫn gửi xe",
     subtitle: "Một vài lưu ý để việc di chuyển thuận tiện hơn",
-    mapImage: "/mapXe.jpg",
+    mapImage: "/mapXeNew.jpg",
     noteLabel: "Lưu ý",
     car: {
       title: "Gửi xe ô tô",
@@ -160,6 +162,36 @@ export const siteConfig: SiteConfig = {
         "Bên cạnh khu Giáo dục Thể chất",
       ],
     },
+  },
+
+  /* ────────────────────────────── Timeline ───────────────────────────── */
+  timeline: {
+    scriptLabel: "Timeline",
+    title: "Lịch trình buổi lễ",
+    subtitle: "Các mốc thời gian trong ngày trọng đại",
+    items: [
+      {
+        time: "10:00 - 11:45",
+        title: "Ký vỏ văn bằng, nhận áo, mũ",
+        icon: "sign",
+        notes: [
+          "Vui lòng đến đúng giờ đã được ghi trên thiệp.",
+          "Trang phục ưu tiên: trắng, be hoặc đen.",
+          "Lễ chính thức diễn ra từ 12:10.",
+          "Nếu muốn xem trực tiếp toàn bộ buổi lễ, hãy liên hệ trực tiếp với Phanh.",
+        ],
+      },
+      {
+        time: "11:45 - 15:40",
+        title: "Diễn ra lễ tốt nghiệp",
+        icon: "cap",
+      },
+      {
+        time: "15:40 - 16:50",
+        title: "Chụp ảnh kỷ niệm cùng gia đình và bạn bè",
+        icon: "camera",
+      },
+    ],
   },
 
   /* ─────────────────────────── UI copy (vi) ──────────────────────────── */

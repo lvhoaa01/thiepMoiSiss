@@ -16,7 +16,7 @@ interface GallerySectionProps {
 }
 
 const SWIPE_THRESHOLD = 45;
-const SCROLL_SPEED = 0.028; // px per millisecond
+const SCROLL_SPEED = 0.06; // px per millisecond default 0.028 --> 0.06
 
 function Tile({
   image,

@@ -89,6 +89,8 @@ export interface IdentityConfig {
   schoolLabel: string;
   guestPrefix: string;
   defaultGuestName: string;
+  /** Portrait photo for the hero medallion (path under /public). */
+  avatar?: string;
   /** Optional full-bleed hero background image (path under /public). */
   heroImage?: string;
 }
@@ -193,6 +195,22 @@ export interface GalleryConfig {
   subtitle: string;
 }
 
+export type TimelineIcon = "sign" | "cap" | "camera" | "clock";
+
+export interface TimelineItem {
+  time: string;
+  title: string;
+  icon: TimelineIcon;
+  notes?: string[];
+}
+
+export interface TimelineConfig {
+  scriptLabel: string;
+  title: string;
+  subtitle: string;
+  items: TimelineItem[];
+}
+
 export interface ParkingRoute {
   label: string;
   steps: string[];
@@ -293,6 +311,7 @@ export interface SiteConfig {
   motion: MotionConfig;
   gallery: GalleryConfig;
   parking: ParkingConfig;
+  timeline: TimelineConfig;
   text: TextConfig;
   socials: SocialLink[];
 }

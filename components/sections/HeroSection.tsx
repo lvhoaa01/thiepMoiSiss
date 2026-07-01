@@ -4,6 +4,7 @@ import { motion, type Variants } from "framer-motion";
 import { Calendar, ChevronDown, Clock, MapPin, Phone } from "lucide-react";
 import { Suspense } from "react";
 
+import { AvatarPortrait } from "@/components/AvatarPortrait";
 import { GuestDetails } from "@/components/GuestDetails";
 import { Flourish } from "@/components/illustrations/Flourish";
 import { GraduateIllustration } from "@/components/illustrations/GraduateIllustration";
@@ -95,7 +96,15 @@ export function HeroSection({ revealed, plan }: HeroSectionProps) {
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <GraduateIllustration className="mx-auto h-40 w-auto" />
+            {identity.avatar ? (
+              <AvatarPortrait
+                src={identity.avatar}
+                alt={identity.graduateName}
+                className="h-48 w-48 sm:h-56 sm:w-56"
+              />
+            ) : (
+              <GraduateIllustration className="mx-auto h-40 w-auto" />
+            )}
           </motion.div>
 
           <motion.div variants={itemVariants} className="mt-9">
