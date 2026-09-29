@@ -1,12 +1,13 @@
 "use client";
 
-import { motion, useAnimationFrame, useMotionValue } from "framer-motion";
+import { motion, useAnimationFrame, useInView, useMotionValue } from "framer-motion";
 import { Loader2, RotateCw } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { siteConfig } from "@/config/site.config";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { fetchWishes } from "@/lib/api";
 import { formatTimestamp, getInitials } from "@/utils/format";
@@ -43,6 +44,9 @@ function WishCard({ wish }: { wish: Wish }) {
 export function GuestbookSection({ reloadSignal }: GuestbookSectionProps) {
   const copy = siteConfig.text.guestbook;
   const prefersReduced = usePrefersReducedMotion();
+  const pageVisible = usePageVisibility();
+  const sectionRef = useRef<HTMLElement>(null);
+  const sectionInView = useInView(sectionRef, { amount: 0.05 });
 
   const [status, setStatus] = useState<FetchStatus>("loading");
   const [wishes, setWishes] = useState<Wish[]>([]);
@@ -78,7 +82,15 @@ export function GuestbookSection({ reloadSignal }: GuestbookSectionProps) {
   }, [wishes]);
 
   useAnimationFrame((_, delta) => {
-    if (prefersReduced || paused.current || copyHeight.current === 0) return;
+    if (
+      prefersReduced ||
+      !pageVisible ||
+      !sectionInView ||
+      paused.current ||
+      copyHeight.current === 0
+    ) {
+      return;
+    }
     let next = y.get() - SCROLL_SPEED * delta;
     if (next <= -copyHeight.current) next += copyHeight.current;
     y.set(next);
@@ -87,7 +99,11 @@ export function GuestbookSection({ reloadSignal }: GuestbookSectionProps) {
   const hasWishes = status === "success" && wishes.length > 0;
 
   return (
-    <section id="guestbook" className="relative px-4 py-24 sm:px-6 sm:py-28 lg:px-8">
+    <section
+      ref={sectionRef}
+      id="guestbook"
+      className="relative px-4 py-24 sm:px-6 sm:py-28 lg:px-8"
+    >
       <div className="mx-auto max-w-4xl">
         <SectionHeading
           scriptLabel={copy.scriptLabel}

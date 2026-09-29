@@ -1,8 +1,8 @@
 "use client";
 
-import { motion, type Variants } from "framer-motion";
+import { motion, useInView, type Variants } from "framer-motion";
 import { Calendar, ChevronDown, Clock, MapPin, Phone } from "lucide-react";
-import { Suspense } from "react";
+import { Suspense, useRef } from "react";
 
 import { AvatarPortrait } from "@/components/AvatarPortrait";
 import { GuestDetails } from "@/components/GuestDetails";
@@ -10,6 +10,7 @@ import { Flourish } from "@/components/illustrations/Flourish";
 import { GraduateIllustration } from "@/components/illustrations/GraduateIllustration";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { siteConfig } from "@/config/site.config";
+import { useMobilePerformanceMode } from "@/hooks/useMobilePerformanceMode";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import type { PlanEntry } from "@/types";
 
@@ -31,6 +32,9 @@ const itemVariants: Variants = {
 
 export function HeroSection({ revealed, plan }: HeroSectionProps) {
   const prefersReduced = usePrefersReducedMotion();
+  const mobilePerformance = useMobilePerformanceMode();
+  const sectionRef = useRef<HTMLElement>(null);
+  const sectionInView = useInView(sectionRef, { amount: 0.05 });
   const { identity, event, text } = siteConfig;
   const animateState = prefersReduced || revealed ? "show" : "hide";
 
@@ -42,6 +46,7 @@ export function HeroSection({ revealed, plan }: HeroSectionProps) {
 
   return (
     <section
+      ref={sectionRef}
       id="hero"
       className="relative flex min-h-[100svh] flex-col items-center justify-center px-4 py-24 sm:px-6 lg:px-8"
       aria-label={identity.invitationTitle}
@@ -155,7 +160,11 @@ export function HeroSection({ revealed, plan }: HeroSectionProps) {
       >
         <span className="font-button text-[0.7rem] overline">{text.hero.scrollHint}</span>
         <motion.span
-          animate={prefersReduced ? undefined : { y: [0, 6, 0] }}
+          animate={
+            prefersReduced || (mobilePerformance && !sectionInView)
+              ? undefined
+              : { y: [0, 6, 0] }
+          }
           transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
         >
           <ChevronDown className="h-5 w-5" aria-hidden />

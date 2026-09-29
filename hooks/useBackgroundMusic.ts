@@ -22,10 +22,13 @@ export function useBackgroundMusic(src: string, volume: number): BackgroundMusic
   useEffect(() => {
     if (!src) return;
 
-    const audio = new Audio(src);
+    const audio = new Audio();
     audio.loop = true;
     audio.volume = Math.min(1, Math.max(0, volume));
-    audio.preload = "auto";
+    // Avoid downloading the entire track during the first mobile paint. Calling
+    // play() from the envelope/button gesture promotes it to a normal load.
+    audio.preload = "metadata";
+    audio.src = src;
     audioRef.current = audio;
 
     const handlePlay = () => setIsPlaying(true);

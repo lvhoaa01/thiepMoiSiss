@@ -100,6 +100,16 @@
     border: 1px solid rgb(var(--color-border) / 0.8);
     box-shadow: var(--shadow-card);
   }
+
+  /* Touch GPUs struggle with many large live backdrop filters. The opaque
+     blush fallback keeps the same visual hierarchy without continuous blur. */
+  @media (hover: none) and (pointer: coarse) {
+    .card {
+      background-color: rgb(var(--color-surface) / 0.96);
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+  }
 }
 
 @layer utilities {

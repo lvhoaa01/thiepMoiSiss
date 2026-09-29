@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import { useMemo } from "react";
 
 import { siteConfig } from "@/config/site.config";
+import { useMobilePerformanceMode } from "@/hooks/useMobilePerformanceMode";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 /** Deterministic pseudo-random in [0,1) — keeps SSR and client markup identical. */
@@ -15,7 +17,10 @@ function seeded(n: number): number {
 /** Subtle drifting rose "dust" that adds depth behind the content. */
 export function Particles() {
   const prefersReduced = usePrefersReducedMotion();
-  const count = siteConfig.motion.particleCount;
+  const mobilePerformance = useMobilePerformanceMode();
+  const pageVisible = usePageVisibility();
+  const configuredCount = siteConfig.motion.particleCount;
+  const count = mobilePerformance ? Math.min(configuredCount, 6) : configuredCount;
 
   const particles = useMemo(
     () =>
@@ -30,7 +35,7 @@ export function Particles() {
     [count],
   );
 
-  if (prefersReduced || !siteConfig.motion.enabled) return null;
+  if (prefersReduced || !pageVisible || !siteConfig.motion.enabled) return null;
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">

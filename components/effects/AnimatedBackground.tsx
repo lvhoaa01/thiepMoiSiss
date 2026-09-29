@@ -1,8 +1,9 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { AnimatePresence, motion, useScroll, useTransform } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
+import { useMobilePerformanceMode } from "@/hooks/useMobilePerformanceMode";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { cn } from "@/utils/cn";
 
@@ -40,12 +41,23 @@ const SECTION_GLOWS: Record<
   },
 };
 
+const MOBILE_GLOWS: Record<string, string> = {
+  hero: "radial-gradient(55% 42% at 16% 14%, rgb(241 180 201 / 0.28), transparent 72%), radial-gradient(48% 38% at 88% 28%, rgb(201 112 145 / 0.16), transparent 74%)",
+  gallery: "radial-gradient(58% 44% at 28% 20%, rgb(241 180 201 / 0.3), transparent 72%), radial-gradient(44% 40% at 84% 72%, rgb(201 112 145 / 0.14), transparent 74%)",
+  countdown: "radial-gradient(54% 42% at 82% 18%, rgb(241 180 201 / 0.28), transparent 72%), radial-gradient(46% 38% at 12% 70%, rgb(201 112 145 / 0.15), transparent 74%)",
+  location: "radial-gradient(58% 44% at 18% 48%, rgb(241 180 201 / 0.3), transparent 72%), radial-gradient(44% 36% at 88% 76%, rgb(201 112 145 / 0.14), transparent 74%)",
+  rsvp: "radial-gradient(54% 44% at 82% 36%, rgb(241 180 201 / 0.3), transparent 72%), radial-gradient(46% 38% at 12% 80%, rgb(201 112 145 / 0.15), transparent 74%)",
+  guestbook: "radial-gradient(58% 44% at 24% 68%, rgb(241 180 201 / 0.29), transparent 72%), radial-gradient(42% 36% at 88% 18%, rgb(201 112 145 / 0.13), transparent 74%)",
+  closing: "radial-gradient(58% 46% at 56% 76%, rgb(241 180 201 / 0.3), transparent 72%), radial-gradient(44% 38% at 8% 20%, rgb(201 112 145 / 0.13), transparent 74%)",
+};
+
 /**
  * Fixed, full-viewport backdrop: soft blush gradient, a slowly panning rose
  * sheen, two parallax pink blobs and a faint vignette. Purely decorative.
  */
 export function AnimatedBackground() {
   const prefersReduced = usePrefersReducedMotion();
+  const mobilePerformance = useMobilePerformanceMode();
   const [activeSection, setActiveSection] = useState("hero");
   const visibility = useRef(new Map<string, number>());
   const { scrollYProgress } = useScroll();
@@ -80,11 +92,23 @@ export function AnimatedBackground() {
       <div
         className={cn(
           "absolute inset-0 opacity-80 [background-image:radial-gradient(50%_40%_at_18%_8%,rgba(241,180,201,0.28),transparent),radial-gradient(45%_40%_at_85%_16%,rgba(201,112,145,0.18),transparent),linear-gradient(120deg,rgba(250,224,234,0.24),transparent)] [background-size:170%_170%]",
-          !prefersReduced && "animate-gradient-pan",
+          !prefersReduced && !mobilePerformance && "animate-gradient-pan",
         )}
       />
 
-      {!prefersReduced ? (
+      {!prefersReduced && mobilePerformance ? (
+        <AnimatePresence initial={false} mode="sync">
+          <motion.div
+            key={activeSection}
+            className="absolute inset-0"
+            style={{ backgroundImage: MOBILE_GLOWS[activeSection] ?? MOBILE_GLOWS.hero }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.78 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.1, ease: "easeInOut" }}
+          />
+        </AnimatePresence>
+      ) : !prefersReduced ? (
         <>
           <motion.div
             className="absolute h-[46vmax] w-[46vmax]"
@@ -115,11 +139,17 @@ export function AnimatedBackground() {
 
       <motion.div
         style={prefersReduced ? undefined : { y: blobOne }}
-        className="absolute -left-24 top-24 h-72 w-72 rounded-full bg-accent/15 blur-3xl"
+        className={cn(
+          "absolute -left-24 top-24 h-72 w-72 rounded-full bg-accent/15 blur-3xl",
+          mobilePerformance && "hidden",
+        )}
       />
       <motion.div
         style={prefersReduced ? undefined : { y: blobTwo }}
-        className="absolute -right-24 top-1/2 h-80 w-80 rounded-full bg-accent-soft/20 blur-3xl"
+        className={cn(
+          "absolute -right-24 top-1/2 h-80 w-80 rounded-full bg-accent-soft/20 blur-3xl",
+          mobilePerformance && "hidden",
+        )}
       />
 
       <div className="absolute inset-0 [background:radial-gradient(120%_120%_at_50%_-10%,transparent,rgb(77_54_64_/_0.05))]" />

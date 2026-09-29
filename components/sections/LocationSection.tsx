@@ -1,22 +1,32 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { ExternalLink, MapPin } from "lucide-react";
+import { useRef } from "react";
 
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Reveal } from "@/components/ui/Reveal";
 import { RippleButton } from "@/components/ui/RippleButton";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { siteConfig } from "@/config/site.config";
+import { useMobilePerformanceMode } from "@/hooks/useMobilePerformanceMode";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 export function LocationSection() {
   const { maps, event, text } = siteConfig;
   const prefersReduced = usePrefersReducedMotion();
+  const mobilePerformance = useMobilePerformanceMode();
+  const sectionRef = useRef<HTMLElement>(null);
+  const sectionInView = useInView(sectionRef, { amount: 0.1 });
   const shouldAnimate = siteConfig.motion.enabled && !prefersReduced;
+  const showRipple = shouldAnimate && (!mobilePerformance || sectionInView);
 
   return (
-    <section id="location" className="relative px-4 py-24 sm:px-6 sm:py-28 lg:px-8">
+    <section
+      ref={sectionRef}
+      id="location"
+      className="relative px-4 py-24 sm:px-6 sm:py-28 lg:px-8"
+    >
       <div className="mx-auto max-w-5xl">
         <SectionHeading
           scriptLabel={text.location.scriptLabel}
@@ -81,7 +91,7 @@ export function LocationSection() {
                   viewport={{ once: true, amount: 0.25 }}
                   transition={{ type: "spring", stiffness: 260, damping: 17, delay: 0.55 }}
                 >
-                  {shouldAnimate ? (
+                  {showRipple ? (
                     <>
                       <motion.span
                         className="absolute inset-0 rounded-full border border-accent/50"

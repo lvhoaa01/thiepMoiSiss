@@ -3,6 +3,7 @@
 import type { CSSProperties } from "react";
 
 import { siteConfig } from "@/config/site.config";
+import { useMobilePerformanceMode } from "@/hooks/useMobilePerformanceMode";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 
 /** Typed CSS custom properties (no `any`). */
@@ -60,16 +61,24 @@ const STARS = [
  */
 export function AmbientEffects() {
   const prefersReduced = usePrefersReducedMotion();
+  const mobilePerformance = useMobilePerformanceMode();
   if (prefersReduced || !siteConfig.motion.enabled) return null;
+
+  const dustItems = mobilePerformance ? DUST.slice(0, 4) : DUST;
+  const sparkleItems = mobilePerformance ? SPARKLES.slice(0, 4) : SPARKLES;
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
       {/* Aurora glow — two very large, very slow, low-opacity radials */}
-      <div className="absolute -left-1/4 top-[-15%] h-[75vh] w-[75vh] rounded-full opacity-[0.6] blur-3xl animate-aurora-a [background:radial-gradient(circle,rgba(241,180,201,0.36),transparent_66%)]" />
-      <div className="absolute -right-1/4 bottom-[-12%] h-[70vh] w-[70vh] rounded-full opacity-[0.55] blur-3xl animate-aurora-b [background:radial-gradient(circle,rgba(255,235,243,0.52),transparent_66%)]" />
+      {!mobilePerformance ? (
+        <>
+          <div className="absolute -left-1/4 top-[-15%] h-[75vh] w-[75vh] rounded-full opacity-[0.6] blur-3xl animate-aurora-a [background:radial-gradient(circle,rgba(241,180,201,0.36),transparent_66%)]" />
+          <div className="absolute -right-1/4 bottom-[-12%] h-[70vh] w-[70vh] rounded-full opacity-[0.55] blur-3xl animate-aurora-b [background:radial-gradient(circle,rgba(255,235,243,0.52),transparent_66%)]" />
+        </>
+      ) : null}
 
       {/* Rose dust */}
-      {DUST.map((dust, index) => (
+      {dustItems.map((dust, index) => (
         <span
           key={`dust-${index}`}
           className={`absolute bottom-[-14px] rounded-full bg-accent-soft animate-dust-rise ${responsiveClass(index, 8, 15)}`}
@@ -88,7 +97,7 @@ export function AmbientEffects() {
       ))}
 
       {/* Edge sparkles */}
-      {SPARKLES.map((sparkle, index) => (
+      {sparkleItems.map((sparkle, index) => (
         <span
           key={`sparkle-${index}`}
           className={`absolute rounded-full animate-sparkle-float ${responsiveClass(index, 8, 14)}`}
@@ -109,13 +118,13 @@ export function AmbientEffects() {
       ))}
 
       {/* Shooting stars — upper background only, staggered */}
-      {STARS.map((star, index) => (
+      {!mobilePerformance ? STARS.map((star, index) => (
         <span
           key={`star-${index}`}
           className="absolute h-[2px] rounded-full animate-shooting-star [background:linear-gradient(90deg,transparent,rgba(241,180,201,0.95),#fff)]"
           style={{ left: star.left, top: star.top, width: star.width, animationDelay: `${star.delay}s` }}
         />
-      ))}
+      )) : null}
     </div>
   );
 }

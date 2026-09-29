@@ -4,6 +4,7 @@ import {
   AnimatePresence,
   motion,
   useAnimationFrame,
+  useInView,
   useMotionValue,
   useScroll,
   useTransform,
@@ -15,6 +16,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { siteConfig } from "@/config/site.config";
+import { useMobilePerformanceMode } from "@/hooks/useMobilePerformanceMode";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import type { GalleryImage } from "@/types";
 
@@ -24,20 +27,23 @@ interface GallerySectionProps {
 
 const SWIPE_THRESHOLD = 45;
 const SCROLL_SPEED = 0.06; // px per millisecond default 0.028 --> 0.06
+const MOBILE_SCROLL_SPEED = 0.028;
 
-function Tile({
-  image,
-  index,
-  onOpen,
-  hidden,
-  reduced,
-}: {
+interface TileProps {
   image: GalleryImage;
   index: number;
   onOpen: (index: number) => void;
   hidden?: boolean;
   reduced: boolean;
-}) {
+}
+
+function DesktopTile({
+  image,
+  index,
+  onOpen,
+  hidden,
+  reduced,
+}: TileProps) {
   const tileRef = useRef<HTMLButtonElement>(null);
   const { scrollYProgress } = useScroll({
     target: tileRef,
@@ -85,9 +91,38 @@ function Tile({
   );
 }
 
+/** Mobile tile: same content/lightbox transition without per-image scroll observers. */
+function MobileTile({ image, index, onOpen, reduced }: TileProps) {
+  return (
+    <motion.button
+      type="button"
+      onClick={() => onOpen(index)}
+      aria-label={`Xem ảnh ${index + 1}`}
+      className="mb-3 block w-full break-inside-avoid overflow-hidden rounded-media shadow-soft tap-transparent"
+      whileTap={reduced ? undefined : { scale: 0.985 }}
+      style={{ contentVisibility: "auto", containIntrinsicSize: "0 220px" }}
+    >
+      <motion.div layoutId={reduced ? undefined : `gallery-image-${index}`}>
+        <Image
+          src={image.src}
+          alt={`Khoảnh khắc ${index + 1}`}
+          width={image.width}
+          height={image.height}
+          sizes="46vw"
+          quality={65}
+          loading="lazy"
+          className="h-auto w-full object-cover"
+        />
+      </motion.div>
+    </motion.button>
+  );
+}
+
 export function GallerySection({ images }: GallerySectionProps) {
   const copy = siteConfig.gallery;
   const prefersReduced = usePrefersReducedMotion();
+  const mobilePerformance = useMobilePerformanceMode();
+  const pageVisible = usePageVisibility();
 
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const touchStartX = useRef<number | null>(null);
@@ -114,20 +149,55 @@ export function GallerySection({ images }: GallerySectionProps) {
 
   // ── Auto-scrolling frame (credits reel) ──────────────────────────────────
   const y = useMotionValue(0);
+  const frameRef = useRef<HTMLDivElement>(null);
   const copyRef = useRef<HTMLDivElement>(null);
   const copyHeight = useRef(0);
+  const frameHeight = useRef(0);
+  const mobileDirection = useRef<-1 | 1>(-1);
+  const frameInView = useInView(frameRef, { amount: 0.05 });
 
   useEffect(() => {
     const measure = () => {
       if (copyRef.current) copyHeight.current = copyRef.current.offsetHeight;
+      if (frameRef.current) frameHeight.current = frameRef.current.offsetHeight;
     };
     measure();
     window.addEventListener("resize", measure);
     return () => window.removeEventListener("resize", measure);
   }, [images]);
 
+  useEffect(() => {
+    y.set(0);
+    mobileDirection.current = -1;
+  }, [mobilePerformance, y]);
+
   useAnimationFrame((_, delta) => {
-    if (prefersReduced || paused.current || copyHeight.current === 0) return;
+    if (
+      prefersReduced ||
+      !pageVisible ||
+      !frameInView ||
+      paused.current ||
+      copyHeight.current === 0
+    ) {
+      return;
+    }
+
+    if (mobilePerformance) {
+      const maxOffset = Math.max(0, copyHeight.current - frameHeight.current);
+      if (maxOffset === 0) return;
+
+      let next = y.get() + mobileDirection.current * MOBILE_SCROLL_SPEED * delta;
+      if (next <= -maxOffset) {
+        next = -maxOffset;
+        mobileDirection.current = 1;
+      } else if (next >= 0) {
+        next = 0;
+        mobileDirection.current = -1;
+      }
+      y.set(next);
+      return;
+    }
+
     let next = y.get() - SCROLL_SPEED * delta;
     if (next <= -copyHeight.current) next += copyHeight.current;
     y.set(next);
@@ -175,10 +245,13 @@ export function GallerySection({ images }: GallerySectionProps) {
           <div className="rounded-card border border-hairline/70 bg-surface/40 p-3 shadow-card sm:p-4">
             {prefersReduced ? (
               // Reduced motion: a plain scrollable frame.
-              <div className="no-scrollbar mask-fade-y h-[72vh] max-h-[700px] overflow-y-auto">
+              <div
+                ref={frameRef}
+                className="no-scrollbar mask-fade-y h-[72vh] max-h-[700px] overflow-y-auto"
+              >
                 <div className="columns-2 gap-3 sm:gap-4 lg:columns-3">
                   {images.map((image, index) => (
-                    <Tile
+                    <MobileTile
                       key={image.src}
                       image={image}
                       index={index}
@@ -188,8 +261,31 @@ export function GallerySection({ images }: GallerySectionProps) {
                   ))}
                 </div>
               </div>
+            ) : mobilePerformance ? (
+              <div
+                ref={frameRef}
+                className="mask-fade-y relative h-[72vh] max-h-[700px] overflow-hidden"
+                onTouchStart={() => (paused.current = true)}
+                onTouchEnd={() => (paused.current = false)}
+                onTouchCancel={() => (paused.current = false)}
+              >
+                <motion.div style={{ y }} className="absolute inset-x-0 top-0">
+                  <div ref={copyRef} className="columns-2 gap-3">
+                    {images.map((image, index) => (
+                      <MobileTile
+                        key={image.src}
+                        image={image}
+                        index={index}
+                        onOpen={open}
+                        reduced={false}
+                      />
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
             ) : (
               <div
+                ref={frameRef}
                 className="mask-fade-y relative h-[72vh] max-h-[700px] overflow-hidden"
                 onMouseEnter={() => (paused.current = true)}
                 onMouseLeave={() => {
@@ -203,7 +299,7 @@ export function GallerySection({ images }: GallerySectionProps) {
                 <motion.div style={{ y }} className="absolute inset-x-0 top-0">
                   <div ref={copyRef} className="columns-2 gap-3 sm:gap-4 lg:columns-3">
                     {images.map((image, index) => (
-                      <Tile
+                      <DesktopTile
                         key={`a-${image.src}`}
                         image={image}
                         index={index}
@@ -214,7 +310,7 @@ export function GallerySection({ images }: GallerySectionProps) {
                   </div>
                   <div className="columns-2 gap-3 sm:gap-4 lg:columns-3">
                     {images.map((image, index) => (
-                      <Tile
+                      <DesktopTile
                         key={`b-${image.src}`}
                         image={image}
                         index={index}
@@ -299,6 +395,7 @@ export function GallerySection({ images }: GallerySectionProps) {
                 width={active.width}
                 height={active.height}
                 sizes="100vw"
+                quality={85}
                 className="h-auto max-h-[82vh] w-auto rounded-media object-contain"
                 priority
               />

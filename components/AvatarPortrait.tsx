@@ -1,8 +1,10 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import Image from "next/image";
+import { useRef } from "react";
 
+import { useMobilePerformanceMode } from "@/hooks/useMobilePerformanceMode";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { cn } from "@/utils/cn";
 
@@ -41,23 +43,39 @@ const STAR_PATH =
  */
 export function AvatarPortrait({ src, alt, className }: AvatarPortraitProps) {
   const prefersReduced = usePrefersReducedMotion();
+  const mobilePerformance = useMobilePerformanceMode();
+  const portraitRef = useRef<HTMLDivElement>(null);
+  const portraitInView = useInView(portraitRef, { amount: 0.05 });
+  const mobileMotionActive = !mobilePerformance || portraitInView;
+  const sparkles = mobilePerformance ? SPARKLES.slice(0, 3) : SPARKLES;
 
   return (
     <motion.div
+      ref={portraitRef}
       className={cn("relative mx-auto", className)}
-      animate={prefersReduced ? undefined : { y: [0, -8, 0] }}
-      transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+      animate={
+        prefersReduced
+          ? undefined
+          : mobileMotionActive
+            ? { y: mobilePerformance ? [0, -3, 0] : [0, -8, 0] }
+            : { y: 0 }
+      }
+      transition={{ duration: mobilePerformance ? 7 : 5, repeat: Infinity, ease: "easeInOut" }}
     >
       {/* large soft radial halo that slowly pulses */}
       <motion.div
         aria-hidden
         className="absolute -inset-12 rounded-[3rem] bg-accent/25 blur-[64px]"
-        animate={prefersReduced ? undefined : { scale: [1, 1.03, 1], opacity: [0.85, 1, 0.85] }}
+        animate={
+          prefersReduced || mobilePerformance
+            ? undefined
+            : { scale: [1, 1.03, 1], opacity: [0.85, 1, 0.85] }
+        }
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
 
       {/* rotating shimmer sweep */}
-      {!prefersReduced ? (
+      {!prefersReduced && !mobilePerformance ? (
         <motion.div
           aria-hidden
           className="absolute -inset-[3px] rounded-[3rem]"
@@ -88,7 +106,7 @@ export function AvatarPortrait({ src, alt, className }: AvatarPortraitProps) {
             className="absolute inset-0 rounded-[2.85rem] [background:linear-gradient(150deg,rgba(255,255,255,0.34),transparent_45%)]"
           />
           {/* glint that sweeps across the portrait */}
-          {!prefersReduced ? (
+          {!prefersReduced && !mobilePerformance ? (
             <motion.div
               aria-hidden
               className="absolute inset-0"
@@ -105,8 +123,8 @@ export function AvatarPortrait({ src, alt, className }: AvatarPortraitProps) {
       </div>
 
       {/* twinkling star sparkles */}
-      {!prefersReduced
-        ? SPARKLES.map((sparkle, index) => (
+      {!prefersReduced && mobileMotionActive
+        ? sparkles.map((sparkle, index) => (
             <motion.svg
               key={index}
               aria-hidden

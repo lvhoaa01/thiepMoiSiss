@@ -5,6 +5,7 @@ import type { PointerEvent, ReactNode } from "react";
 
 import { CardShine } from "@/components/ui/CardShine";
 import { siteConfig } from "@/config/site.config";
+import { useMobilePerformanceMode } from "@/hooks/useMobilePerformanceMode";
 import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { cn } from "@/utils/cn";
 
@@ -37,7 +38,8 @@ export function GlassCard({
   tilt = true,
 }: GlassCardProps) {
   const prefersReduced = usePrefersReducedMotion();
-  const tiltEnabled = tilt && siteConfig.motion.enabled && !prefersReduced;
+  const mobilePerformance = useMobilePerformanceMode();
+  const tiltEnabled = tilt && siteConfig.motion.enabled && !prefersReduced && !mobilePerformance;
   const rotateXRaw = useMotionValue(0);
   const rotateYRaw = useMotionValue(0);
   const rotateX = useSpring(rotateXRaw, { stiffness: 190, damping: 24, mass: 0.45 });
