@@ -14,7 +14,7 @@ function seeded(n: number): number {
   return value - Math.floor(value);
 }
 
-const SPARKLE_COLORS = ["#D8B978", "#EAD9B0", "#FBF5EA"];
+const SPARKLE_COLORS = ["#F1B6CD", "#F8D8E5", "#FFF5F9"];
 
 /** Show more particles on larger screens (pure CSS — no JS media query). */
 function responsiveClass(index: number, mobile: number, tablet: number): string {
@@ -37,7 +37,7 @@ const SPARKLES = Array.from({ length: 20 }, (_, i) => {
   };
 });
 
-// ── Golden dust: motes drifting upward across the whole width ──
+// ── Rose dust: motes drifting upward across the whole width ──
 const DUST = Array.from({ length: 24 }, (_, i) => ({
   left: seeded(i + 20) * 100,
   size: 2.5 + seeded(i + 21) * 4.5,
@@ -54,7 +54,7 @@ const STARS = [
 ];
 
 /**
- * Subtle premium ambient layer: aurora glow, floating golden dust, edge
+ * Subtle premium ambient layer: aurora glow, floating rose dust, edge
  * sparkles and occasional shooting stars. All motion is CSS transform/opacity
  * (GPU-friendly) and disabled under reduced-motion. Sits behind the content.
  */
@@ -65,10 +65,10 @@ export function AmbientEffects() {
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
       {/* Aurora glow — two very large, very slow, low-opacity radials */}
-      <div className="absolute -left-1/4 top-[-15%] h-[75vh] w-[75vh] rounded-full opacity-[0.6] blur-3xl animate-aurora-a [background:radial-gradient(circle,rgba(216,185,120,0.32),transparent_66%)]" />
-      <div className="absolute -right-1/4 bottom-[-12%] h-[70vh] w-[70vh] rounded-full opacity-[0.55] blur-3xl animate-aurora-b [background:radial-gradient(circle,rgba(251,245,234,0.42),transparent_66%)]" />
+      <div className="absolute -left-1/4 top-[-15%] h-[75vh] w-[75vh] rounded-full opacity-[0.6] blur-3xl animate-aurora-a [background:radial-gradient(circle,rgba(241,180,201,0.36),transparent_66%)]" />
+      <div className="absolute -right-1/4 bottom-[-12%] h-[70vh] w-[70vh] rounded-full opacity-[0.55] blur-3xl animate-aurora-b [background:radial-gradient(circle,rgba(255,235,243,0.52),transparent_66%)]" />
 
-      {/* Golden dust */}
+      {/* Rose dust */}
       {DUST.map((dust, index) => (
         <span
           key={`dust-${index}`}
@@ -112,7 +112,7 @@ export function AmbientEffects() {
       {STARS.map((star, index) => (
         <span
           key={`star-${index}`}
-          className="absolute h-[2px] rounded-full animate-shooting-star [background:linear-gradient(90deg,transparent,rgba(216,185,120,0.9),#fff)]"
+          className="absolute h-[2px] rounded-full animate-shooting-star [background:linear-gradient(90deg,transparent,rgba(241,180,201,0.95),#fff)]"
           style={{ left: star.left, top: star.top, width: star.width, animationDelay: `${star.delay}s` }}
         />
       ))}

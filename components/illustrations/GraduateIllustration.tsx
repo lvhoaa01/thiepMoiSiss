@@ -4,7 +4,7 @@ interface GraduateIllustrationProps {
 
 /**
  * A refined flat illustration of a graduate (cap, gown, diploma) drawn with
- * SVG. Academic palette: charcoal gown, cream collar, champagne-gold tassel.
+ * SVG. Academic palette: charcoal gown, blush collar and rose-pink tassel.
  */
 export function GraduateIllustration({ className }: GraduateIllustrationProps) {
   return (
@@ -25,8 +25,8 @@ export function GraduateIllustration({ className }: GraduateIllustrationProps) {
           <stop offset="1" stopColor="#1B1815" />
         </linearGradient>
         <radialGradient id="glowGradient" cx="0.5" cy="0.45" r="0.55">
-          <stop offset="0" stopColor="#D8B978" stopOpacity="0.4" />
-          <stop offset="1" stopColor="#D8B978" stopOpacity="0" />
+          <stop offset="0" stopColor="#F1B6CD" stopOpacity="0.46" />
+          <stop offset="1" stopColor="#F1B6CD" stopOpacity="0" />
         </radialGradient>
       </defs>
 
@@ -45,16 +45,16 @@ export function GraduateIllustration({ className }: GraduateIllustrationProps) {
         fill="url(#gownGradient)"
       />
 
-      {/* collar + stoles (gold) */}
-      <path d="M110 152 L130 188 L150 152 Z" fill="#F7F0E4" />
-      <path d="M119 154 L128 154 L126 256 L117 256 Z" fill="#B0894B" />
-      <path d="M132 154 L141 154 L143 256 L134 256 Z" fill="#B0894B" />
+      {/* collar + rose stoles */}
+      <path d="M110 152 L130 188 L150 152 Z" fill="#FFF5F9" />
+      <path d="M119 154 L128 154 L126 256 L117 256 Z" fill="#C97091" />
+      <path d="M132 154 L141 154 L143 256 L134 256 Z" fill="#C97091" />
 
       {/* diploma */}
-      <rect x="90" y="214" width="80" height="20" rx="10" fill="#F7F0E4" />
+      <rect x="90" y="214" width="80" height="20" rx="10" fill="#FFF5F9" />
       <ellipse cx="90" cy="224" rx="6" ry="10" fill="#E9DEC9" />
       <ellipse cx="170" cy="224" rx="6" ry="10" fill="#E9DEC9" />
-      <rect x="124" y="210" width="12" height="28" rx="3" fill="#B0894B" />
+      <rect x="124" y="210" width="12" height="28" rx="3" fill="#C97091" />
 
       {/* neck + head */}
       <rect x="121" y="134" width="18" height="22" rx="8" fill="#EAB98F" />
@@ -79,17 +79,17 @@ export function GraduateIllustration({ className }: GraduateIllustrationProps) {
       <path d="M130 54 L188 80 L130 106 L72 80 Z" fill="url(#boardGradient)" />
       <ellipse cx="130" cy="80" rx="6" ry="3.4" fill="#1B1815" />
 
-      {/* tassel (gold) */}
-      <circle cx="130" cy="76" r="4" fill="#B0894B" />
+      {/* tassel (rose) */}
+      <circle cx="130" cy="76" r="4" fill="#C97091" />
       <path
         d="M130 76 L181 84 L181 122"
-        stroke="#B0894B"
+        stroke="#C97091"
         strokeWidth="2.6"
         fill="none"
         strokeLinecap="round"
       />
-      <path d="M176 120 L186 120 L182 137 L180 137 Z" fill="#B0894B" />
-      <circle cx="181" cy="120" r="3.2" fill="#D8B978" />
+      <path d="M176 120 L186 120 L182 137 L180 137 Z" fill="#C97091" />
+      <circle cx="181" cy="120" r="3.2" fill="#F1B6CD" />
     </svg>
   );
 }

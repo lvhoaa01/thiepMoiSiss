@@ -14,15 +14,16 @@ import type { SiteConfig } from "@/types";
  */
 
 // Venue used to build both the embedded map and the external link.
-const MAP_QUERY = "Trường Đại học Hà Nội, Km 9 Nguyễn Trãi, Nam Từ Liêm, Hà Nội";
+const MAP_QUERY =
+  "Học viện Cán bộ Thành phố Hồ Chí Minh, 324 Chu Văn An, phường Bình Thạnh, TP.HCM";
 const MAP_ZOOM = 16;
 
 export const siteConfig: SiteConfig = {
   /* ─────────────────────────── SEO / metadata ────────────────────────── */
   meta: {
-    title: "Thư mời tốt nghiệp · Nguyễn Phương Anh",
+    title: "Thư mời tốt nghiệp · Đoàn Nguyễn Thúy Quyên",
     description:
-      "Trân trọng kính mời bạn đến chung vui trong lễ tốt nghiệp của Nguyễn Phương Anh.",
+      "Trân trọng kính mời bạn đến chung vui trong lễ tốt nghiệp của Đoàn Nguyễn Thúy Quyên.",
     locale: "vi_VN",
     siteUrl: "https://graduation-invitation.vercel.app",
   },
@@ -31,9 +32,9 @@ export const siteConfig: SiteConfig = {
   identity: {
     invitationTitle: "Thư mời tốt nghiệp",
     ceremonyLabel: "Lễ tốt nghiệp của",
-    graduateName: "Nguyễn Phương Anh",
+    graduateName: "Đoàn Nguyễn Thúy Quyên",
     degreeLabel: "Tân Cử nhân",
-    schoolLabel: "Trường Đại học Hà Nội",
+    schoolLabel: "Học viện Cán bộ Thành phố Hồ Chí Minh",
     guestPrefix: "Trân trọng kính mời",
     defaultGuestName: "Quý vị",
     // Portrait photo shown in the hero medallion (place file in /public).
@@ -44,14 +45,14 @@ export const siteConfig: SiteConfig = {
 
   /* ────────────────────────────── Event ──────────────────────────────── */
   event: {
-    dateLabel: "10.07.2026",
-    timeLabel: "15:40 - 16:50",
-    weekdayLabel: "Thứ Sáu",
-    address: ["Km 9, đường Nguyễn Trãi", "phường Đại Mỗ", "Hà Nội"],
-    venueName: "Trường Đại học Hà Nội",
-    phone: "0394536855",
-    countdownTargetISO: "2026-07-10T15:40:00+07:00",
-    calendar: { year: 2026, month: 7, highlightDay: 10 },
+    dateLabel: "10.10.2026",
+    timeLabel: "09:00 - 12:00",
+    weekdayLabel: "Thứ Bảy",
+    address: ["324 Chu Văn An", "phường Bình Thạnh", "TP.HCM"],
+    venueName: "Sảnh A, Cổng số 2 · Học viện Cán bộ Thành phố Hồ Chí Minh",
+    phone: "0374849637",
+    countdownTargetISO: "2026-10-10T15:40:00+07:00",
+    calendar: { year: 2026, month: 10, highlightDay: 10 },
   },
 
   /* ────────────────────────────── Maps ───────────────────────────────── */
@@ -75,33 +76,33 @@ export const siteConfig: SiteConfig = {
 
   /* ────────────────────────────── Music ──────────────────────────────── */
   music: {
-    src: "/music/I_Love_You_3000.mp3",
+    src: "/music/No_Hoa.mp3",
     enabledByDefault: true,
     volume: 0.35,
   },
 
   /* ────────────────────────────── Theme ──────────────────────────────── */
-  // Academic palette: charcoal + champagne gold + ivory. Each color is a
+  // Pastel-pink palette. Each color is a
   // space-separated RGB triple ("R G B") so Tailwind can apply opacity.
   theme: {
     colors: {
-      primary: "38 33 29", // charcoal / espresso
-      secondary: "125 106 90", // warm taupe
-      accent: "176 137 75", // champagne gold
-      accentSoft: "216 185 120", // light gold
-      background: "250 246 239", // ivory page
-      surface: "255 253 249", // warm white card
-      ink: "43 39 34", // body text
-      subtle: "138 124 110", // muted text
-      border: "223 209 186", // hairline
-      onDark: "247 240 228", // cream on dark
+      primary: "88 52 66", // deep dusty rose
+      secondary: "151 109 126", // muted mauve
+      accent: "201 112 145", // rose pink
+      accentSoft: "241 180 201", // pastel pink
+      background: "255 246 249", // blush white
+      surface: "255 252 253", // soft white card
+      ink: "77 54 64", // body text
+      subtle: "143 112 125", // muted rose gray
+      border: "240 207 220", // pink hairline
+      onDark: "255 247 250", // blush white on dark
     },
-    gradient: "linear-gradient(100deg, #9C7636, #D8B978 46%, #B0894B)",
+    gradient: "linear-gradient(100deg, #C66B8E, #F1B6CD 48%, #D984A4)",
     radius: { card: "1.75rem", media: "1.25rem", control: "0.85rem" },
     shadow: {
-      soft: "0 1px 2px rgb(43 39 34 / 0.04), 0 8px 24px rgb(43 39 34 / 0.06)",
-      card: "0 2px 6px rgb(43 39 34 / 0.05), 0 24px 60px -28px rgb(43 39 34 / 0.26)",
-      lift: "0 34px 80px -34px rgb(43 39 34 / 0.42)",
+      soft: "0 1px 2px rgb(88 52 66 / 0.04), 0 8px 24px rgb(201 112 145 / 0.10)",
+      card: "0 2px 6px rgb(88 52 66 / 0.05), 0 24px 60px -28px rgb(201 112 145 / 0.30)",
+      lift: "0 34px 80px -34px rgb(151 109 126 / 0.46)",
     },
   },
 
@@ -178,7 +179,7 @@ export const siteConfig: SiteConfig = {
           "Vui lòng đến đúng giờ đã được ghi trên thiệp.",
           "Trang phục ưu tiên: trắng, be hoặc đen.",
           "Lễ chính thức diễn ra từ 12:10.",
-          "Nếu muốn xem trực tiếp toàn bộ buổi lễ, hãy liên hệ trực tiếp với Phanh.",
+          "Nếu muốn xem trực tiếp toàn bộ buổi lễ, hãy liên hệ trực tiếp với Quyên.",
         ],
       },
       {
@@ -233,7 +234,7 @@ export const siteConfig: SiteConfig = {
       attendingYes: "Có, tôi sẽ đến",
       attendingNo: "Rất tiếc, tôi không thể đến",
       messageLabel: "Lời chúc",
-      messagePlaceholder: "Gửi lời chúc đến Phương Anh...",
+      messagePlaceholder: "Gửi lời chúc đến Thúy Quyên...",
       submit: "Gửi lời chúc",
       submitting: "Đang gửi...",
       successTitle: "Cảm ơn bạn rất nhiều!",
@@ -248,7 +249,7 @@ export const siteConfig: SiteConfig = {
     guestbook: {
       scriptLabel: "Wishes",
       title: "Sổ lưu bút",
-      subtitle: "Những lời chúc yêu thương gửi đến Phương Anh",
+      subtitle: "Những lời chúc yêu thương gửi đến Thúy Quyên",
       empty: "Hãy là người đầu tiên gửi lời chúc!",
       loading: "Đang tải lời chúc...",
       error: "Không tải được lời chúc. Vui lòng thử lại sau.",
@@ -258,7 +259,7 @@ export const siteConfig: SiteConfig = {
       scriptLabel: "Thank You",
       thankYou: "Trân trọng cảm ơn",
       quote:
-        "Trước hết, con muốn gửi lời cảm ơn và biết ơn sâu sắc đặc biệt đến người mẹ kính yêu của con và người chị yếu dấu của em - nguồn động lực to lớn nhất để con luôn mạnh mẽ cố gắng, phấn đấu từng ngày. Không kém phần quan trọng chính, sự có mặt của đại gia đình làm hậu thuẫn phía sau con là ông bà nội cùng các bác, bá, cô, chú, thím, anh, chị, em. Cuối cùng, bản thân Phanh luôn cảm thấy may mắn vì trên hành trình Phanh trưởng thành, Phanh đã gặp được những người thầy, người anh, người chị và người bạn hết sức đáng quý. Phanh muốn gửi lời cảm ơn sâu sắc đến tất cả mọi người đã luôn yêu thương, bên cạnh và giúp đỡ Phanh rất nhiều trong học tập cũng như công việc. Phanh xin lưu giữ và ghi nhớ tất cả mọi người trong tim.",
+        "Hành trình ở cánh cổng đại học đã khép lại, hơn 4 năm học tập và làm việc. Con/em biết rằng mình đã rất may mắn khi luôn có sự đồng hành của gia đình, bạn bè và người thân. Hơn ai hết, con muốn bày tỏ lòng biết ơn chân thành nhất đối với Ba, Mẹ và Chị. Con cảm ơn gia đình mình đã là điểm tựa tinh thần, hỗ trợ cho con trong suốt chặng hành trình đầy thử thách vừa qua. Con cũng xin được cảm ơn Ông, Bà đã luôn động viên và cổ vũ con trên giảng đường đại học. Cảm ơn gia đình nội ngoại hai bên đã luôn quan tâm, giúp đỡ con. Bên cạnh gia đình, người thân thì em/mình cũng rất hạnh phúc khi luôn có sự hỗ trợ, chia sẻ và sát cánh từ các Anh, Chị, Em, Bạn bè. Lúc vui, lúc buồn luôn là những người đồng hành đáng tin cậy nhất của Thúy Quyên. Tất cả tình cảm của mọi người có lẽ là món quà tuyệt vời nhất mà Quyên nhận được, là sức mạnh tinh thần, động lực phấn đấu trong cả một đoạn đường vừa qua. Cuối lời, Quyên xin gửi tới những người thương mến của mình một lời chúc bình an, hạnh phúc. Mong rằng chúng ta sẽ mãi có thể đồng hành với nhau💗",
       contactLabel: "Liên hệ trực tiếp",
     },
     music: { play: "Bật nhạc nền", pause: "Tắt nhạc nền" },

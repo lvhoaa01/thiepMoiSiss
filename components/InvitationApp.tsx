@@ -13,9 +13,7 @@ import { GallerySection } from "@/components/sections/GallerySection";
 import { GuestbookSection } from "@/components/sections/GuestbookSection";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { LocationSection } from "@/components/sections/LocationSection";
-import { ParkingSection } from "@/components/sections/ParkingSection";
 import { RsvpSection } from "@/components/sections/RsvpSection";
-import { TimelineSection } from "@/components/sections/TimelineSection";
 import { MusicToggle } from "@/components/ui/MusicToggle";
 import { siteConfig } from "@/config/site.config";
 import { useBackgroundMusic } from "@/hooks/useBackgroundMusic";
@@ -80,8 +78,6 @@ export function InvitationApp({ plan, galleryImages }: InvitationAppProps) {
       <GallerySection images={galleryImages} />
       <CountdownSection />
       <LocationSection />
-      <ParkingSection />
-      <TimelineSection />
       <RsvpSection onSubmitted={handleRsvpSubmitted} />
       <GuestbookSection reloadSignal={reloadGuestbook} />
       <ClosingSection />

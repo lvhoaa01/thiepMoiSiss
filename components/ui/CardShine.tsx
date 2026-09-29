@@ -9,7 +9,7 @@ interface CardShineProps {
 }
 
 /**
- * A single, slow, elegant golden light sweep across a card (~once every 17s).
+ * A single, slow, elegant rose light sweep across a card (~once every 17s).
  * Sits above the card content at very low opacity, is pointer-inert, and is
  * disabled under reduced-motion. The parent card supplies the rounded clip.
  */
@@ -23,7 +23,7 @@ export function CardShine({ delay = 0 }: CardShineProps) {
       className="pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-[inherit]"
     >
       <span
-        className="absolute inset-y-[-30%] left-0 w-1/2 animate-card-shine [background:linear-gradient(100deg,transparent,rgba(255,255,255,0.45),rgba(216,185,120,0.32),transparent)]"
+        className="absolute inset-y-[-30%] left-0 w-1/2 animate-card-shine [background:linear-gradient(100deg,transparent,rgba(255,255,255,0.48),rgba(241,180,201,0.36),transparent)]"
         style={{ animationDelay: `${delay}s` }}
       />
     </span>

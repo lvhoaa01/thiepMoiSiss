@@ -33,8 +33,8 @@ export function ParkingSection() {
   const { parking } = siteConfig;
 
   return (
-    <section id="parking" className="relative px-4 py-24 sm:py-28">
-      <div className="mx-auto max-w-3xl">
+    <section id="parking" className="relative px-4 py-24 sm:px-6 sm:py-28 lg:px-8">
+      <div className="mx-auto max-w-6xl">
         <SectionHeading
           scriptLabel={parking.scriptLabel}
           title={parking.title}

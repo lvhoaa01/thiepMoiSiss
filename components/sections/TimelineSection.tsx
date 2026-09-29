@@ -23,8 +23,8 @@ export function TimelineSection() {
   const prefersReduced = usePrefersReducedMotion();
 
   return (
-    <section id="timeline" className="relative px-4 py-24 sm:py-28">
-      <div className="mx-auto max-w-2xl">
+    <section id="timeline" className="relative px-4 py-24 sm:px-6 sm:py-28 lg:px-8">
+      <div className="mx-auto max-w-5xl">
         <SectionHeading
           scriptLabel={timeline.scriptLabel}
           title={timeline.title}
@@ -37,7 +37,7 @@ export function TimelineSection() {
             aria-hidden
             className="absolute bottom-3 left-6 top-3 w-px bg-hairline"
           />
-          {/* gold line that grows on entering the viewport */}
+          {/* rose line that grows on entering the viewport */}
           <motion.span
             aria-hidden
             className="absolute bottom-3 left-6 top-3 w-[2px] origin-top bg-gradient-to-b from-accent to-accent-soft"

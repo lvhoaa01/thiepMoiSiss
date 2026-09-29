@@ -12,7 +12,7 @@ function seeded(n: number): number {
   return value - Math.floor(value);
 }
 
-/** Subtle drifting gold "dust" that adds depth behind the content. */
+/** Subtle drifting rose "dust" that adds depth behind the content. */
 export function Particles() {
   const prefersReduced = usePrefersReducedMotion();
   const count = siteConfig.motion.particleCount;

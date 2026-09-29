@@ -21,8 +21,8 @@ export function ClosingSection() {
   const { text, event, identity, socials } = siteConfig;
 
   return (
-    <section id="closing" className="relative px-4 pb-28 pt-24 sm:pt-28">
-      <div className="mx-auto max-w-xl text-center">
+    <section id="closing" className="relative px-4 pb-28 pt-24 sm:px-6 sm:pt-28 lg:px-8">
+      <div className="mx-auto max-w-4xl text-center">
         <Reveal>
           <GraduateIllustration className="mx-auto h-36 w-auto" />
         </Reveal>
@@ -44,7 +44,7 @@ export function ClosingSection() {
         </Reveal>
 
         <Reveal delay={0.25}>
-          <p className="mx-auto max-w-md text-balance font-quote text-lg italic leading-relaxed text-ink/80 sm:text-xl">
+          <p className="mx-auto max-w-2xl text-balance font-quote text-lg italic leading-relaxed text-ink/80 sm:text-xl">
             “{text.closing.quote}”
           </p>
         </Reveal>

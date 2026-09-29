@@ -11,6 +11,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { RippleButton } from "@/components/ui/RippleButton";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { siteConfig } from "@/config/site.config";
+import { usePrefersReducedMotion } from "@/hooks/usePrefersReducedMotion";
 import { submitRsvp } from "@/lib/api";
 import { cn } from "@/utils/cn";
 import type { Attendance } from "@/types";
@@ -25,6 +26,7 @@ interface RsvpSectionProps {
 export function RsvpSection({ onSubmitted }: RsvpSectionProps) {
   const { text, motion: motionCfg } = siteConfig;
   const copy = text.rsvp;
+  const prefersReduced = usePrefersReducedMotion();
 
   const [name, setName] = useState("");
   const [attending, setAttending] = useState<"" | Attendance>("");
@@ -69,8 +71,8 @@ export function RsvpSection({ onSubmitted }: RsvpSectionProps) {
   };
 
   return (
-    <section id="rsvp" className="relative px-4 py-24 sm:py-28">
-      <div className="mx-auto max-w-xl">
+    <section id="rsvp" className="relative px-4 py-24 sm:px-6 sm:py-28 lg:px-8">
+      <div className="mx-auto max-w-3xl">
         <SectionHeading
           scriptLabel={copy.scriptLabel}
           title={copy.title}
@@ -83,46 +85,63 @@ export function RsvpSection({ onSubmitted }: RsvpSectionProps) {
               <Confetti variant="burst" count={motionCfg.confettiCount} />
             ) : null}
 
-            <AnimatePresence mode="wait">
-              {status === "success" ? (
-                <motion.div
-                  key="success"
-                  className="flex flex-col items-center py-6 text-center"
-                  initial={{ opacity: 0, scale: 0.94 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4 }}
-                >
-                  <motion.span
-                    className="grid h-16 w-16 place-items-center rounded-full bg-accent/12 text-accent"
-                    initial={{ scale: 0, rotate: -20 }}
-                    animate={{ scale: 1, rotate: 0 }}
-                    transition={{ type: "spring", stiffness: 220, damping: 14 }}
+            <motion.div
+              layout={!prefersReduced}
+              transition={
+                prefersReduced
+                  ? { duration: 0 }
+                  : { layout: { duration: 0.45, ease: [0.16, 1, 0.3, 1] } }
+              }
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {status === "success" ? (
+                  <motion.div
+                    key="success"
+                    layout={!prefersReduced}
+                    className="flex flex-col items-center py-6 text-center"
+                    initial={prefersReduced ? false : { opacity: 0, scale: 0.94, y: 14 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={prefersReduced ? undefined : { opacity: 0, scale: 0.97 }}
+                    transition={{ duration: prefersReduced ? 0 : 0.4 }}
                   >
-                    <CheckCircle2 className="h-9 w-9" aria-hidden />
-                  </motion.span>
-                  <h3 className="mt-5 font-heading text-2xl font-semibold text-primary">
-                    {copy.successTitle}
-                  </h3>
-                  <p className="mt-2 font-body text-sm text-subtle">{copy.successBody}</p>
-                  <button
-                    type="button"
-                    onClick={resetForm}
-                    className="mt-6 font-button text-sm font-medium text-accent underline-offset-4 hover:underline"
+                    <motion.span
+                      className="grid h-16 w-16 place-items-center rounded-full bg-accent/12 text-accent"
+                      initial={prefersReduced ? false : { scale: 0, rotate: -20 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={
+                        prefersReduced
+                          ? { duration: 0 }
+                          : { type: "spring", stiffness: 220, damping: 14 }
+                      }
+                    >
+                      <CheckCircle2 className="h-9 w-9" aria-hidden />
+                    </motion.span>
+                    <h3 className="mt-5 font-heading text-2xl font-semibold text-primary">
+                      {copy.successTitle}
+                    </h3>
+                    <p className="mt-2 font-body text-sm text-subtle">{copy.successBody}</p>
+                    <motion.button
+                      type="button"
+                      onClick={resetForm}
+                      className="mt-6 font-button text-sm font-medium text-accent underline-offset-4 hover:underline"
+                      whileHover={prefersReduced ? undefined : { y: -2 }}
+                      whileTap={prefersReduced ? undefined : { scale: 0.97 }}
+                    >
+                      {copy.sendAnother}
+                    </motion.button>
+                  </motion.div>
+                ) : (
+                  <motion.form
+                    key="form"
+                    layout={!prefersReduced}
+                    onSubmit={handleSubmit}
+                    className="space-y-5"
+                    initial={prefersReduced ? false : { opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={prefersReduced ? undefined : { opacity: 0, y: -10 }}
+                    transition={{ duration: prefersReduced ? 0 : 0.28 }}
+                    noValidate
                   >
-                    {copy.sendAnother}
-                  </button>
-                </motion.div>
-              ) : (
-                <motion.form
-                  key="form"
-                  onSubmit={handleSubmit}
-                  className="space-y-5"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  noValidate
-                >
                   <Field id="rsvp-name" label={copy.nameLabel} error={errors.name}>
                     <input
                       id="rsvp-name"
@@ -180,22 +199,33 @@ export function RsvpSection({ onSubmitted }: RsvpSectionProps) {
                     </p>
                   ) : null}
 
-                  <RippleButton type="submit" disabled={status === "submitting"} className="w-full">
-                    {status === "submitting" ? (
-                      <>
-                        <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
-                        {copy.submitting}
-                      </>
-                    ) : (
-                      <>
-                        <Send className="h-4 w-4" aria-hidden />
-                        {copy.submit}
-                      </>
-                    )}
-                  </RippleButton>
-                </motion.form>
-              )}
-            </AnimatePresence>
+                    <RippleButton type="submit" disabled={status === "submitting"} className="w-full">
+                      {status === "submitting" ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+                          {copy.submitting}
+                        </>
+                      ) : (
+                        <>
+                          <motion.span
+                            initial={prefersReduced ? false : { x: -4, opacity: 0 }}
+                            animate={{ x: 0, opacity: 1 }}
+                            transition={
+                              prefersReduced
+                                ? { duration: 0 }
+                                : { type: "spring", stiffness: 360, damping: 22 }
+                            }
+                          >
+                            <Send className="h-4 w-4" aria-hidden />
+                          </motion.span>
+                          {copy.submit}
+                        </>
+                      )}
+                    </RippleButton>
+                  </motion.form>
+                )}
+              </AnimatePresence>
+            </motion.div>
           </GlassCard>
         </Reveal>
       </div>

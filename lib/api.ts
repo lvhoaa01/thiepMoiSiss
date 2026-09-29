@@ -40,17 +40,15 @@ export async function submitRsvp(input: RsvpInput): Promise<ApiResponse<null>> {
 }
 
 /**
- * Load guestbook wishes. A GET to the Apps Script web app returns readable
- * JSON (Google serves it with permissive CORS), so we parse it normally.
- * Returns an empty list when no backend is configured yet.
+ * Load guestbook wishes through our same-origin route. The server route talks
+ * to Apps Script, so redirects and CORS behavior never affect the browser.
  */
 export async function fetchWishes(): Promise<ApiResponse<Wish[]>> {
-  if (!isConfigured()) {
-    return { ok: true, data: [] };
-  }
-
   try {
-    const response = await fetch(`${ENDPOINT}?action=wishes`, { method: "GET" });
+    const response = await fetch("/api/wishes", {
+      method: "GET",
+      cache: "no-store",
+    });
     if (!response.ok) {
       return { ok: false, error: `http-${response.status}` };
     }

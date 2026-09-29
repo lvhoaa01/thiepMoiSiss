@@ -5,29 +5,29 @@
 /*
  * Fallback theme tokens (the real values are written onto <body> from
  * config/site.config.ts via app/layout.tsx). Colors are "R G B" triples.
- * Academic palette: charcoal + champagne gold + ivory.
+ * Pastel-pink palette with deep rose text for accessible contrast.
  */
 :root {
-  --color-primary: 38 33 29;
-  --color-secondary: 125 106 90;
-  --color-accent: 176 137 75;
-  --color-accent-soft: 216 185 120;
-  --color-background: 250 246 239;
-  --color-surface: 255 253 249;
-  --color-ink: 43 39 34;
-  --color-subtle: 138 124 110;
-  --color-border: 223 209 186;
-  --color-on-dark: 247 240 228;
+  --color-primary: 88 52 66;
+  --color-secondary: 151 109 126;
+  --color-accent: 201 112 145;
+  --color-accent-soft: 241 180 201;
+  --color-background: 255 246 249;
+  --color-surface: 255 252 253;
+  --color-ink: 77 54 64;
+  --color-subtle: 143 112 125;
+  --color-border: 240 207 220;
+  --color-on-dark: 255 247 250;
 
-  --gradient-accent: linear-gradient(100deg, #9c7636, #d8b978 46%, #b0894b);
+  --gradient-accent: linear-gradient(100deg, #c66b8e, #f1b6cd 48%, #d984a4);
 
   --radius-card: 1.75rem;
   --radius-media: 1.25rem;
   --radius-control: 0.85rem;
 
-  --shadow-soft: 0 1px 2px rgb(43 39 34 / 0.04), 0 8px 24px rgb(43 39 34 / 0.06);
-  --shadow-card: 0 2px 6px rgb(43 39 34 / 0.05), 0 24px 60px -28px rgb(43 39 34 / 0.26);
-  --shadow-lift: 0 34px 80px -34px rgb(43 39 34 / 0.42);
+  --shadow-soft: 0 1px 2px rgb(88 52 66 / 0.04), 0 8px 24px rgb(201 112 145 / 0.1);
+  --shadow-card: 0 2px 6px rgb(88 52 66 / 0.05), 0 24px 60px -28px rgb(201 112 145 / 0.3);
+  --shadow-lift: 0 34px 80px -34px rgb(151 109 126 / 0.46);
 
   --dur-fast: 0.35s;
   --dur-base: 0.7s;
@@ -86,7 +86,7 @@
 }
 
 @layer components {
-  /* Elegant paper card used across the site. */
+  /* Soft translucent card used across the site. */
   .card {
     background-color: rgb(var(--color-surface) / 0.86);
     backdrop-filter: blur(14px) saturate(120%);
@@ -103,7 +103,7 @@
 }
 
 @layer utilities {
-  /* Gold gradient text (headings / numerals). */
+  /* Rose gradient text (headings / numerals). */
   .text-gradient {
     background-image: var(--gradient-accent);
     -webkit-background-clip: text;

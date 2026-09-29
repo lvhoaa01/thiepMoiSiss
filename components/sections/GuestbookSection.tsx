@@ -87,8 +87,8 @@ export function GuestbookSection({ reloadSignal }: GuestbookSectionProps) {
   const hasWishes = status === "success" && wishes.length > 0;
 
   return (
-    <section id="guestbook" className="relative px-4 py-24 sm:py-28">
-      <div className="mx-auto max-w-xl">
+    <section id="guestbook" className="relative px-4 py-24 sm:px-6 sm:py-28 lg:px-8">
+      <div className="mx-auto max-w-4xl">
         <SectionHeading
           scriptLabel={copy.scriptLabel}
           title={copy.title}

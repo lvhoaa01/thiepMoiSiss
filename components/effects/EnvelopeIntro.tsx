@@ -23,9 +23,9 @@ const FLAP_CLIP = `polygon(0% 0%, 100% 0%, 50% ${CHEVRON}%)`;
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 /**
- * Realistic light (cream) envelope opening, matched to the ivory background.
+ * Realistic blush envelope opening, matched to the pastel-pink background.
  *
- * Closed: a clearly-read cream envelope (tonal flap, gold-foil crease, soft cast
+ * Closed: a clearly-read blush envelope (tonal flap, rose-foil crease, soft cast
  * shadow) whose card sits low, entirely behind the opaque front. On tap → flap
  * lifts fully → card slides up and out → overlay fades to reveal the hero. The
  * tap also starts background music.
@@ -66,17 +66,17 @@ export function EnvelopeIntro({ onOpen, onComplete }: EnvelopeIntroProps) {
 
       {/* Envelope */}
       <motion.div
-        className="relative aspect-[3/2] w-[min(20rem,80vw)] rounded-2xl shadow-[0_30px_60px_-24px_rgb(120_92_50_/_0.45)]"
+        className="relative aspect-[3/2] w-[min(20rem,80vw)] rounded-2xl shadow-[0_30px_60px_-24px_rgb(151_109_126_/_0.45)]"
         style={{ transformPerspective: 1200 }}
         animate={{ y: animate ? -18 : 0 }}
         transition={{ duration: 0.8, ease: EASE }}
       >
         {/* back panel */}
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-[#F7EFE0] to-[#EBDDC5] ring-1 ring-accent/30" />
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-[#FFF5F9] to-[#F7DCE7] ring-1 ring-accent/30" />
 
         {/* card — sits low, fully behind the pocket; slides up on open */}
         <motion.div
-          className="absolute left-1/2 top-[48%] w-[82%] rounded-lg bg-gradient-to-b from-white to-[#FBF5EA] p-3 text-center shadow-lg ring-1 ring-accent/25"
+          className="absolute left-1/2 top-[48%] w-[82%] rounded-lg bg-gradient-to-b from-white to-[#FFF5F9] p-3 text-center shadow-lg ring-1 ring-accent/25"
           initial={{ x: "-50%", y: 0 }}
           animate={{ x: "-50%", y: animate ? -152 : 0, scale: animate ? 1.05 : 1 }}
           transition={{ duration: 0.9, delay: animate ? 1 : 0, ease: EASE }}
@@ -93,7 +93,7 @@ export function EnvelopeIntro({ onOpen, onComplete }: EnvelopeIntroProps) {
 
         {/* front pocket */}
         <div
-          className="absolute inset-0 z-20 rounded-2xl bg-gradient-to-b from-[#F4EAD7] to-[#E6D6BA]"
+          className="absolute inset-0 z-20 rounded-2xl bg-gradient-to-b from-[#FBEAF1] to-[#F2CDDC]"
           style={{ clipPath: POCKET_CLIP }}
         />
         {/* pocket bottom seam (envelope front look) */}
@@ -103,18 +103,18 @@ export function EnvelopeIntro({ onOpen, onComplete }: EnvelopeIntroProps) {
           preserveAspectRatio="none"
           className="absolute inset-0 z-20 h-full w-full"
         >
-          <path d="M0 66.7 L50 44 L100 66.7" fill="none" stroke="rgb(176 137 75 / 0.35)" strokeWidth="0.4" />
+          <path d="M0 66.7 L50 44 L100 66.7" fill="none" stroke="rgb(201 112 145 / 0.35)" strokeWidth="0.4" />
         </svg>
         {/* soft shadow the closed flap casts on the pocket (fades as it opens) */}
         <motion.div
           aria-hidden
-          className="absolute inset-0 z-20 rounded-2xl [background:linear-gradient(180deg,rgb(140_108_58_/_0.24),transparent_26%)]"
+          className="absolute inset-0 z-20 rounded-2xl [background:linear-gradient(180deg,rgb(151_109_126_/_0.22),transparent_26%)]"
           style={{ clipPath: POCKET_CLIP }}
           animate={{ opacity: animate ? 0 : 1 }}
           transition={{ duration: 0.4, delay: animate ? 0.15 : 0 }}
         />
 
-        {/* flap — a touch deeper cream, with a gold-foil crease */}
+        {/* flap — a touch deeper blush, with a rose-foil crease */}
         <motion.div
           className="absolute inset-0 z-30 origin-top"
           style={{ transformOrigin: "top", transformPerspective: 1200 }}
@@ -126,7 +126,7 @@ export function EnvelopeIntro({ onOpen, onComplete }: EnvelopeIntroProps) {
           }}
         >
           <div
-            className="absolute inset-0 rounded-2xl bg-gradient-to-b from-[#F1E6CF] to-[#DFCDA9]"
+            className="absolute inset-0 rounded-2xl bg-gradient-to-b from-[#F9E4ED] to-[#EDC3D4]"
             style={{ clipPath: FLAP_CLIP }}
           />
           {/* soft sheen on the flap */}
@@ -134,14 +134,14 @@ export function EnvelopeIntro({ onOpen, onComplete }: EnvelopeIntroProps) {
             className="absolute inset-0 rounded-2xl [background:linear-gradient(150deg,rgb(255_255_255_/_0.45),transparent_55%)]"
             style={{ clipPath: FLAP_CLIP }}
           />
-          {/* gold-foil crease line along the flap edge (with light emboss) */}
+          {/* rose-foil crease line along the flap edge (with light emboss) */}
           <svg
             aria-hidden
             viewBox="0 0 100 66.7"
             preserveAspectRatio="none"
             className="absolute inset-0 h-full w-full"
           >
-            <path d="M0 0 L50 28 L100 0" fill="none" stroke="rgb(176 137 75 / 0.8)" strokeWidth="0.6" />
+            <path d="M0 0 L50 28 L100 0" fill="none" stroke="rgb(201 112 145 / 0.8)" strokeWidth="0.6" />
             <path d="M0 1.1 L50 29.1 L100 1.1" fill="none" stroke="rgb(255 255 255 / 0.55)" strokeWidth="0.4" />
           </svg>
         </motion.div>

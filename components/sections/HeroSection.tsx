@@ -43,16 +43,16 @@ export function HeroSection({ revealed, plan }: HeroSectionProps) {
   return (
     <section
       id="hero"
-      className="relative flex min-h-[100svh] flex-col items-center justify-center px-4 py-24"
+      className="relative flex min-h-[100svh] flex-col items-center justify-center px-4 py-24 sm:px-6 lg:px-8"
       aria-label={identity.invitationTitle}
     >
       <GlassCard
         strong
         shine
         shineDelay={0}
-        className="relative w-full max-w-lg overflow-hidden px-7 py-14 text-center sm:px-12"
+        className="relative w-full max-w-3xl overflow-hidden px-7 py-14 text-center sm:px-12 lg:px-16"
       >
-        {/* inset gold frame */}
+        {/* inset rose frame */}
         <span
           aria-hidden
           className="pointer-events-none absolute inset-3 rounded-[1.45rem] border border-accent/25"
@@ -102,7 +102,7 @@ export function HeroSection({ revealed, plan }: HeroSectionProps) {
               <AvatarPortrait
                 src={identity.avatar}
                 alt={identity.graduateName}
-                className="h-48 w-48 sm:h-56 sm:w-56"
+                className="h-[19rem] w-56 sm:h-[23rem] sm:w-[17rem]"
               />
             ) : (
               <GraduateIllustration className="mx-auto h-40 w-auto" />

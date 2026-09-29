@@ -31,13 +31,13 @@ const STAR_PATH =
   "M12 0 C12.6 8 16 11.4 24 12 C16 12.6 12.6 16 12 24 C11.4 16 8 12.6 0 12 C8 11.4 11.4 8 12 0 Z";
 
 /**
- * Premium glowing portrait: a circular medallion with a champagne-gold gradient
+ * Premium glowing portrait: a softly rounded frame with a rose gradient
  * ring, soft radial light, a rotating shimmer sweep, a glint that crosses the
  * photo, gentle float and twinkling star sparkles. All continuous motion is
  * disabled under reduced-motion.
  *
- * The provided photo is not background-removed, so it is framed inside the
- * circular mask (object-cover) rather than floated as a cutout.
+ * The current portrait has a transparent background and a vertical aspect
+ * ratio, so it is rendered with object-contain to preserve the full cutout.
  */
 export function AvatarPortrait({ src, alt, className }: AvatarPortraitProps) {
   const prefersReduced = usePrefersReducedMotion();
@@ -51,7 +51,7 @@ export function AvatarPortrait({ src, alt, className }: AvatarPortraitProps) {
       {/* large soft radial halo that slowly pulses */}
       <motion.div
         aria-hidden
-        className="absolute -inset-12 rounded-full bg-accent/25 blur-[64px]"
+        className="absolute -inset-12 rounded-[3rem] bg-accent/25 blur-[64px]"
         animate={prefersReduced ? undefined : { scale: [1, 1.03, 1], opacity: [0.85, 1, 0.85] }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
@@ -60,31 +60,32 @@ export function AvatarPortrait({ src, alt, className }: AvatarPortraitProps) {
       {!prefersReduced ? (
         <motion.div
           aria-hidden
-          className="absolute -inset-[3px] rounded-full"
+          className="absolute -inset-[3px] rounded-[3rem]"
           style={{
             background:
-              "conic-gradient(from 0deg, transparent 0deg, rgba(216,185,120,0.7) 40deg, transparent 110deg, transparent 360deg)",
+              "conic-gradient(from 0deg, transparent 0deg, rgba(241,180,201,0.85) 40deg, transparent 110deg, transparent 360deg)",
           }}
           animate={{ rotate: 360 }}
           transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
         />
       ) : null}
 
-      {/* gold ring + portrait */}
-      <div className="absolute inset-0 rounded-full bg-gradient-accent p-[3px] shadow-lift">
-        <div className="relative h-full w-full overflow-hidden rounded-full ring-1 ring-white/40">
+      {/* rose frame + full portrait */}
+      <div className="absolute inset-0 rounded-[3rem] bg-gradient-accent p-[3px] shadow-lift">
+        <div className="relative h-full w-full overflow-hidden rounded-[2.85rem] bg-surface/55 ring-1 ring-white/60">
           <Image
             src={src}
             alt={alt}
             fill
-            sizes="240px"
-            className="object-cover object-[center_38%]"
+            sizes="(min-width: 640px) 272px, 224px"
+            quality={95}
+            className="object-contain object-center p-1"
             priority
           />
           {/* subtle inner sheen */}
           <div
             aria-hidden
-            className="absolute inset-0 rounded-full [background:linear-gradient(150deg,rgba(255,255,255,0.28),transparent_45%)]"
+            className="absolute inset-0 rounded-[2.85rem] [background:linear-gradient(150deg,rgba(255,255,255,0.34),transparent_45%)]"
           />
           {/* glint that sweeps across the portrait */}
           {!prefersReduced ? (
@@ -110,7 +111,7 @@ export function AvatarPortrait({ src, alt, className }: AvatarPortraitProps) {
               key={index}
               aria-hidden
               viewBox="0 0 24 24"
-              className="absolute text-accent-soft drop-shadow-[0_0_6px_rgba(216,185,120,0.95)]"
+              className="absolute text-accent-soft drop-shadow-[0_0_6px_rgba(241,180,201,0.95)]"
               style={{
                 top: sparkle.top,
                 left: sparkle.left,
