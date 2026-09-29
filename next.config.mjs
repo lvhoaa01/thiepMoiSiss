@@ -18,7 +18,7 @@ export default function nextConfig(phase) {
     reactStrictMode: true,
     poweredByHeader: false,
     images: {
-      qualities: [75, 95],
+      qualities: [65, 75, 85, 95],
     },
   };
 }
