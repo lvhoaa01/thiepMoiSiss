@@ -76,7 +76,7 @@ export const siteConfig: SiteConfig = {
 
   /* ────────────────────────────── Music ──────────────────────────────── */
   music: {
-    src: "/music/No_Hoa.mp3",
+    src: "/music/No_Hoa.MP3",
     enabledByDefault: true,
     volume: 0.35,
   },
